@@ -10,7 +10,7 @@ The detailed description of the development and debug process with Java SDK can 
 ## Before you start
 1) Make sure that docker (v17 and later) is installed (or install it by `sudo curl -sSL https://get.docker.com/ | sh`)
 2) Clone this repository (`git clone https://github.com/hobbit-project/java-sdk-example.git`)
-3) Make sure that hobbit-java-sdk dependency is installed into your local maven repository (or install it by `mvn validate`)
+3) Make sure that hobbit-java-sdk dependency (declared in [pom.xml](https://github.com/hobbit-project/java-sdk-example/blob/master/pom.xml)) is installed into your local maven repository (or install it by `mvn validate`)
 
 ## How to create a benchmark
 1) Configure the contents of the [ExampleDockersBuilder](https://github.com/hobbit-project/java-sdk-example/blob/master/src/main/java/org/hobbit/sdk/examples/docker/ExampleDockersBuilder.java) file (repo path, imagenamePrefix, jarFileName, dockerWorkDir)
