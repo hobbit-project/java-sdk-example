@@ -1,8 +1,8 @@
 # HOBBIT Java SDK Example pack
 
-This repository contains starting kit for benchmark/system development using the proposed [HOBBIT Java SDK](https://github.com/hobbit-project/java-sdk).
+This repository contains starting kit for development using the proposed [HOBBIT Java SDK](https://github.com/hobbit-project/java-sdk).
 
-The repository may be cloned and used as basis for every new project on the HOBBIT Platform.
+The repository may be cloned and used as basis for every new project (benchmark or system) on the HOBBIT Platform.
 
 The detailed description of the development and debug process with Java SDK can be found [here](https://github.com/hobbit-project/java-sdk).
 
