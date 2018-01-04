@@ -1,6 +1,6 @@
 # HOBBIT Java SDK Example pack
 
-This repository contains starting kit for development using the proposed [HOBBIT Java SDK](https://github.com/hobbit-project/java-sdk).
+This repository contains starting kit for [HOBBIT components](https://github.com/hobbit-project/platform/wiki/Develop-a-benchmark-component-in-Java) development using the proposed [HOBBIT Java SDK](https://github.com/hobbit-project/java-sdk).
 
 The repository may be cloned and used as basis for every new project (benchmark or system) on the HOBBIT Platform.
 
@@ -9,8 +9,9 @@ The detailed description of the development and debug process with Java SDK can 
 # Usage
 ## Before you start
 1) Make sure that docker (v17 and later) is installed (or install it by `sudo curl -sSL https://get.docker.com/ | sh`)
-2) Clone this repository (`git clone https://github.com/hobbit-project/java-sdk-example.git`)
-3) Make sure that hobbit-java-sdk dependency (declared in [pom.xml](https://github.com/hobbit-project/java-sdk-example/blob/master/pom.xml)) is installed into your local maven repository (or install it by `mvn validate`)
+2) Make sure that maven (v3 and later) is installed (or install it by `sudo apt-get install maven`)
+3) Clone this repository (`git clone https://github.com/hobbit-project/java-sdk-example.git`)
+4) Make sure that hobbit-java-sdk dependency (declared in [pom.xml](https://github.com/hobbit-project/java-sdk-example/blob/master/pom.xml)) is installed into your local maven repository (or install it by `mvn validate`)
 
 ## How to create a benchmark
 1) Configure the contents of the [ExampleDockersBuilder](https://github.com/hobbit-project/java-sdk-example/blob/master/src/main/java/org/hobbit/sdk/examples/docker/ExampleDockersBuilder.java) file (repo path, imagenamePrefix, jarFileName, dockerWorkDir)
