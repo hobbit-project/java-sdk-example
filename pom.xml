@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.hobbit.sdk</groupId>
-    <artifactId>example-benchmark</artifactId>
+    <artifactId>example</artifactId>
     <version>1.0</version>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -136,26 +136,28 @@
                 </executions>
             </plugin>
 
-			<!--<plugin>-->
-				<!--<groupId>org.apache.maven.plugins</groupId>-->
-				<!--<artifactId>maven-assembly-plugin</artifactId>-->
-				<!--<configuration>-->
-					<!--<descriptorRefs>-->
-						<!--<descriptorRef>jar-with-dependencies</descriptorRef>-->
-						<!--&lt;!&ndash;<descriptorRef>jar</descriptorRef>&ndash;&gt;-->
-					<!--</descriptorRefs>-->
-					<!--<appendAssemblyId>false</appendAssemblyId>-->
-				<!--</configuration>-->
-				<!--<executions>-->
-					<!--<execution>-->
-						<!--<id>make-assembly</id> &lt;!&ndash; this is used for inheritance merges &ndash;&gt;-->
-						<!--<phase>compile</phase> &lt;!&ndash; bind to the packaging phase &ndash;&gt;-->
-						<!--<goals>-->
-							<!--<goal>single</goal>-->
-						<!--</goals>-->
-					<!--</execution>-->
-				<!--</executions>-->
-			<!--</plugin>-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-install-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>hack-binary</id>
+                        <phase>validate</phase>
+                        <configuration>
+                            <file>${project.basedir}/libs/hobbit-java-sdk-1.0.jar</file>
+                            <repositoryLayout>default</repositoryLayout>
+                            <groupId>org.hobbit</groupId>
+                            <artifactId>hobbit-java-sdk</artifactId>
+                            <version>1.0</version>
+                            <packaging>jar</packaging>
+                            <generatePom>true</generatePom>
+                        </configuration>
+                        <goals>
+                            <goal>install-file</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
 
         </plugins>
     </build>
