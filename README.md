@@ -4,7 +4,7 @@ This repository contains starting kit for benchmark/system development using the
 
 The repository may be cloned and used as basis for every new project on the HOBBIT Platform.
 
-The detailed description of the development and debug process viwh use of the Java SDK can be found [here](https://github.com/hobbit-project/java-sdk).
+The detailed description of the development and debug process with Java SDK can be found [here](https://github.com/hobbit-project/java-sdk).
 
 # Usage
 ## Before you start
