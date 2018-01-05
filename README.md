@@ -4,8 +4,6 @@ This repository contains the starting kit for [HOBBIT components](https://github
 
 The repository may be cloned and used as basis for every new project (benchmark or system) on the HOBBIT Platform.
 
-The detailed description of the development and debug process with Java SDK can be found [here](https://github.com/hobbit-project/java-sdk).
-
 # Usage
 ## Before you start
 1) Make sure that docker (v17 and later) is installed (or install it by `sudo curl -sSL https://get.docker.com/ | sh`)
@@ -32,3 +30,5 @@ If you haven't URLs of benchmark images, but have source-codes of the benchmark 
 
 ## FAQ
 If `checkHealth()` methods hangs up, then look for the errors (via Ctrl+F) in console output. Components execution is parallel, so critical errors will not fail the whole process.
+
+The detailed description of the development and debug process with Java SDK can be found [here](https://github.com/hobbit-project/java-sdk).
