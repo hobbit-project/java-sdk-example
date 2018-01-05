@@ -15,12 +15,15 @@ The detailed description of the development and debug process with Java SDK can 
 
 ## How to create a benchmark
 1) Configure the contents of the [ExampleDockersBuilder](https://github.com/hobbit-project/java-sdk-example/blob/master/src/main/java/org/hobbit/sdk/examples/docker/ExampleDockersBuilder.java) file (repo path, imagenamePrefix, jarFileName, dockerWorkDir)
-2) Execute components as java codes (run checkHealth() from [ExampleBenchmarkTest](https://github.com/hobbit-project/java-sdk-example/blob/master/src/test/java/org/hobbit/sdk/examples/ExampleBenchmarkTest.java)) you may hit the breakpoints inside your code.
-3) Pack source codes with dependencies into jar file ('mvn package -DskipTests=true')
-4) Run buildImages() from [ExampleBenchmarkDockerizedTest](https://github.com/hobbit-project/java-sdk-example/blob/master/src/test/java/org/hobbit/sdk/examples/ExampleBenchmarkDockerizedTest.java). Images will be build from jar-file you have packed on step 4, so make sure that jar-file is actual and contains your last changes. 
-5) Execute components as docker containers (run checkHealth() from [ExampleBenchmarkDockerizedTest](https://github.com/hobbit-project/java-sdk-example/blob/master/src/test/java/org/hobbit/sdk/examples/ExampleBenchmarkDockerizedTest.java)). You may see all the logs from your containers.
-6) Upload your images to remote repositories (docker login ... , docker push ...)
+2) Execute components as java codes (run `checkHealth()` method from [ExampleBenchmarkTest](https://github.com/hobbit-project/java-sdk-example/blob/master/src/test/java/org/hobbit/sdk/examples/ExampleBenchmarkTest.java)) you may hit the breakpoints inside your code.
+3) Pack source codes with dependencies into jar file (`mvn package -DskipTests=true`)
+4) Run the `buildImages()` method from [ExampleBenchmarkDockerizedTest](https://github.com/hobbit-project/java-sdk-example/blob/master/src/test/java/org/hobbit/sdk/examples/ExampleBenchmarkDockerizedTest.java). Images will be build from jar-file you have packed on step 4, so make sure that jar-file is actual and contains your last changes. 
+5) Execute components as docker containers (run the `checkHealth()` method from [ExampleBenchmarkDockerizedTest](https://github.com/hobbit-project/java-sdk-example/blob/master/src/test/java/org/hobbit/sdk/examples/ExampleBenchmarkDockerizedTest.java)). You may see all the logs from your containers.
+6) Upload your images to remote repositories (by manual running the `docker login ... `, `docker push ...` commands)
 7) Upload ttl-files, where needed (benchmark or system).
 
 ## How to create a system for existing benchmark
-To be added
+If benchmark designer provides URLs of docker images for all the components of the benchmark, then you can run that images locally and debug your system under the particular bechmark.
+1) Specify image names for pull-based dockerizers (see ExampleSystemTest.java)
+2) Run the `checkHealth()` method from [ExampleSystemTest.java](https://github.com/hobbit-project/java-sdk-example/blob/master/src/test/java/org/hobbit/sdk/examples/examplebenchmark/ExampleSystemTest.java). You may swich between dockerized and pure java implemetation by commenting/uncommenting the line `systemAdapter = new SystemAdapter();`
+If you haven't URLs of images, but have source-codes of the benchmark then you can run them locally (non-dockerized mode will be enought). See the `How to create a benchmark` section.
