@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.hobbit.sdk</groupId>
-    <artifactId>example</artifactId>
+    <artifactId>sdk-example-benchmark</artifactId>
     <version>1.0</version>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -37,7 +37,7 @@
         <dependency>
             <groupId>org.hobbit</groupId>
             <artifactId>hobbit-java-sdk</artifactId>
-            <version>1.0</version>
+            <version>1.1</version>
         </dependency>
 
 
@@ -144,11 +144,11 @@
                         <id>hack-binary</id>
                         <phase>validate</phase>
                         <configuration>
-                            <file>${project.basedir}/libs/hobbit-java-sdk-1.0.jar</file>
+                            <file>${project.basedir}/libs/hobbit-java-sdk-1.1.jar</file>
                             <repositoryLayout>default</repositoryLayout>
                             <groupId>org.hobbit</groupId>
                             <artifactId>hobbit-java-sdk</artifactId>
-                            <version>1.0</version>
+                            <version>1.1</version>
                             <packaging>jar</packaging>
                             <generatePom>true</generatePom>
                         </configuration>
