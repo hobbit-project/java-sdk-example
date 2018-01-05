@@ -24,7 +24,10 @@ The detailed description of the development and debug process with Java SDK can 
 
 ## How to create a system for existing benchmark
 If benchmark designer provides URLs of docker images for all the components of the benchmark, then you can run that images locally and debug your system under the particular bechmark.
-1) Specify image names for pull-based dockerizers (see the [ExampleSystemTest.java](https://github.com/hobbit-project/java-sdk-example/blob/master/src/test/java/org/hobbit/sdk/examples/examplebenchmark/ExampleSystemTest.java)). If benchmark doe not contain the full amount of components, when remove the ommited components from MultipleCommandsReaction.
+1) Specify image names for pull-based dockerizers (see the [ExampleSystemTest.java](https://github.com/hobbit-project/java-sdk-example/blob/master/src/test/java/org/hobbit/sdk/examples/examplebenchmark/ExampleSystemTest.java)). If benchmark does not contain the full amount of components, when remove the omited components from MultipleCommandsReaction.
 2) Run the `checkHealth()` method from [ExampleSystemTest.java](https://github.com/hobbit-project/java-sdk-example/blob/master/src/test/java/org/hobbit/sdk/examples/examplebenchmark/ExampleSystemTest.java). You may swich between dockerized and pure java implemetation by commenting/uncommenting the line `systemAdapter = new SystemAdapter();`
 
-If you haven't URLs of images, but have source-codes of the benchmark then you can run them locally (non-dockerized mode will be enought). See the `How to create a benchmark` section.
+If you haven't URLs of benchmark images, but have source-codes of the benchmark then you can run them locally (non-dockerized mode will be enought). See the `How to create a benchmark` section.
+
+## FAQ
+If `checkHealth()` methods hangs up, then look for the errors (via Ctrl+F) in console output. Components execution is parallel, so critical errors will to fail the whole process and requires developers to control output.
