@@ -31,4 +31,4 @@ If benchmark designer provides URLs of docker images for all the components of t
 If you haven't URLs of benchmark images, but have source-codes of the benchmark then you can run them locally (non-dockerized mode will be enought). See the `How to create a benchmark` section.
 
 ## FAQ
-If `checkHealth()` methods hangs up, then look for the errors (via Ctrl+F) in console output. Components execution is parallel, so critical errors will to fail the whole process and requires developers to control output.
+If `checkHealth()` methods hangs up, then look for the errors (via Ctrl+F) in console output. Components execution is parallel, so critical errors will not fail the whole process.
