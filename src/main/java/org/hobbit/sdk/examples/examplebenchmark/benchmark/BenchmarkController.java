@@ -1,4 +1,4 @@
-package org.hobbit.sdk.examples.examplebenchmark;
+package org.hobbit.sdk.examples.examplebenchmark.benchmark;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.jena.rdf.model.NodeIterator;

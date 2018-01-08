@@ -3,9 +3,10 @@ package org.hobbit.sdk.examples.examplebenchmark;
 import org.hobbit.core.components.Component;
 import org.hobbit.sdk.ComponentsExecutor;
 import org.hobbit.sdk.EnvironmentVariablesWrapper;
-import org.hobbit.sdk.LocalEvalStorage;
 import org.hobbit.sdk.docker.AbstractDockerizer;
 import org.hobbit.sdk.docker.RabbitMqDockerizer;
+import org.hobbit.sdk.examples.examplebenchmark.benchmark.*;
+import org.hobbit.sdk.examples.examplebenchmark.system.SystemAdapter;
 import org.hobbit.sdk.utils.CommandQueueListener;
 import org.hobbit.sdk.utils.commandreactions.MultipleCommandsReaction;
 
@@ -30,7 +31,7 @@ public class ExampleBenchmarkTest extends EnvironmentVariablesWrapper {
     Component benchmark = new BenchmarkController();
     Component datagen = new DataGenerator();
     Component taskgen = new TaskGenerator();
-    Component evalstorage = new LocalEvalStorage();
+    Component evalstorage = new EvalStorage();
     Component system = new SystemAdapter();
     Component evalmodule = new EvalModule();
 

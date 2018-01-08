@@ -1,4 +1,4 @@
-package org.hobbit.sdk.examples.examplebenchmark;
+package org.hobbit.sdk.examples.examplebenchmark.benchmark;
 
 import org.hobbit.core.components.AbstractEvaluationStorage;
 import org.hobbit.core.data.Result;
@@ -9,7 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
-import java.util.concurrent.Semaphore;
 
 
 public class EvalStorage extends AbstractEvaluationStorage {

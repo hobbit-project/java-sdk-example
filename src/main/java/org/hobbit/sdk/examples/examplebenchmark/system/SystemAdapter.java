@@ -1,4 +1,4 @@
-package org.hobbit.sdk.examples.examplebenchmark;
+package org.hobbit.sdk.examples.examplebenchmark.system;
 
 import org.hobbit.core.components.AbstractSystemAdapter;
 import org.slf4j.Logger;
