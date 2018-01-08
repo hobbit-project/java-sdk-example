@@ -22,7 +22,7 @@ If you want to use specific DockerFiles for some of your components, when specif
 7) Upload ttl-files, where needed (benchmark or system).
 
 ## How to create a system for existing benchmark
-If benchmark designer provides URLs of docker images for all the components of the benchmark, then you can run that images locally and debug your system under the particular bechmark.
+If benchmark designer provides URLs of docker images for all the components of the benchmark, then you can run that images locally and debug your system under the particular bechmark. You may remove all the unnessessary benchmark-related code from the project tree (Benchmark folder, ExampleBenchmarkTest, ExampleBenchmarkDockerizedTest).
 1) Specify image names for pull-based dockerizers (see the [ExampleSystemTest.java](https://github.com/hobbit-project/java-sdk-example/blob/master/src/test/java/org/hobbit/sdk/examples/examplebenchmark/ExampleSystemTest.java)). If benchmark does not contain the full amount of components, when remove the omited components from MultipleCommandsReaction.
 2) Run the `checkHealth()` method from [ExampleSystemTest.java](https://github.com/hobbit-project/java-sdk-example/blob/master/src/test/java/org/hobbit/sdk/examples/examplebenchmark/ExampleSystemTest.java). You may swich between dockerized and pure java implemetation by commenting/uncommenting the line `systemAdapter = new SystemAdapter();`
 
