@@ -4,7 +4,7 @@ This repository contains the starting kit for [HOBBIT components](https://github
 
 The repository may be cloned and used as basis for every new project (benchmark or system) on the HOBBIT Platform.
 
-The advantages of applying the Java SDK against the standard approach decribed [here](https://github.com/hobbit-project/java-sdk-example/blob/master/SDK_vs_Standard_Way.pdf)
+The advantages of applying the Java SDK against the standard approach decribed [here](https://github.com/hobbit-project/java-sdk-example/blob/master/SDK_vs_Standard_Way.pdf).
 
 # Usage
 ## Before you start
