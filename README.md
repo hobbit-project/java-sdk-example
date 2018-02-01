@@ -1,6 +1,7 @@
 # HOBBIT Java SDK Example kit
 
 This repository contains all types of [HOBBIT-compatible components](https://github.com/hobbit-project/platform/wiki/Develop-a-benchmark-component-in-Java) and number of tests, requred to debug components locally without having a running instance of the platform.  
+
 The repository may be cloned and used as HOBBIT-compatible basis for the future project (benchmark or system). The tests allow developers to debug components either as pure java codes or being packaged into docker containers. Fully tested docker images may be uploaded and executed in the online platform without any modifications.
 
 The added value of the Java SDK against standart HOBBIT approach decribed [here](https://github.com/hobbit-project/java-sdk-example/blob/master/SDK_vs_Standard_Way.pdf).
