@@ -1,0 +1,18 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix ex: <http://example.org/> .
+@prefix gerbil: <http://w3id.org/gerbil/vocab#> .
+@prefix hobbit: <http://w3id.org/hobbit/vocab#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+
+<http://project-hobbit.eu/resources/debs2017/debssystemcsv>	a	hobbit:SystemInstance;
+    rdfs:label	"DEBS system csv correct"@en;
+	rdfs:comment "DEBS system scv correct"@en;
+	hobbit:implementsAPI <http://www.example.org/exampleBenchmark/debsAPI>;
+	hobbit:imageName "git.project-hobbit.eu:4567/rkaterinenko/debssystemcsv";
+    <http://www.debs2017.org/gc/machineCount> "1000"^^xsd:unsignedInt;
+	<http://www.debs2017.org/gc/probabilityThreshold> "0.005"^^xsd:double;
+	<http://www.debs2017.org/gc/windowSize> "10"^^xsd:unsignedInt;
+	<http://www.debs2017.org/gc/transitionsCount> "5"^^xsd:unsignedInt;
+	<http://www.debs2017.org/gc/maxClusterIterations> "50"^^xsd:unsignedInt.

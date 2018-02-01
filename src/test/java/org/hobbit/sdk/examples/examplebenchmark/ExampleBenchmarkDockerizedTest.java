@@ -3,6 +3,7 @@ package org.hobbit.sdk.examples.examplebenchmark;
 import org.hobbit.core.components.Component;
 import org.hobbit.sdk.ComponentsExecutor;
 import org.hobbit.sdk.EnvironmentVariablesWrapper;
+import org.hobbit.sdk.JenaKeyValue;
 import org.hobbit.sdk.docker.AbstractDockerizer;
 import org.hobbit.sdk.docker.RabbitMqDockerizer;
 import org.hobbit.sdk.docker.builders.*;
@@ -18,6 +19,7 @@ import org.junit.Test;
 import java.util.Date;
 
 import static org.hobbit.sdk.CommonConstants.*;
+import static org.hobbit.sdk.examples.dummybenchmark.docker.DummyDockersBuilder.SYSTEM_URI;
 import static org.hobbit.sdk.examples.examplebenchmark.docker.ExampleDockersBuilder.*;
 
 /**
@@ -49,9 +51,9 @@ public class ExampleBenchmarkDockerizedTest extends EnvironmentVariablesWrapper 
         rabbitMqDockerizer = RabbitMqDockerizer.builder().build();
 
         setupCommunicationEnvironmentVariables(rabbitMqDockerizer.getHostName(), "session_"+String.valueOf(new Date().getTime()));
-        setupBenchmarkEnvironmentVariables(EXPERIMENT_URI);
+        setupBenchmarkEnvironmentVariables(EXPERIMENT_URI, createBenchmarkParameters());
         setupGeneratorEnvironmentVariables(1,1);
-        setupSystemEnvironmentVariables(SYSTEM_URI);
+        setupSystemEnvironmentVariables(SYSTEM_URI, createSystemParameters());
 
         benchmarkBuilder = new BenchmarkDockerBuilder(new ExampleDockersBuilder(BenchmarkController.class, BENCHMARK_IMAGE_NAME).useCachedImage(useCachedImage));
         dataGeneratorBuilder = new DataGenDockerBuilder(new ExampleDockersBuilder(DataGenerator.class, DATAGEN_IMAGE_NAME).useCachedImage(useCachedImage));
@@ -129,7 +131,17 @@ public class ExampleBenchmarkDockerizedTest extends EnvironmentVariablesWrapper 
     }
 
 
+    public JenaKeyValue createBenchmarkParameters() {
+        JenaKeyValue kv = new JenaKeyValue();
+        //kv.setValue(BENCHMARK_MODE_INPUT_NAME, BENCHMARK_MODE_DYNAMIC+":10:1");
+        return kv;
+    }
 
+    private static JenaKeyValue createSystemParameters(){
+        JenaKeyValue kv = new JenaKeyValue();
+        //kv.setValue(BENCHMARK_MODE_INPUT_NAME, BENCHMARK_MODE_DYNAMIC+":10:1");
+        return kv;
+    }
 
 
 

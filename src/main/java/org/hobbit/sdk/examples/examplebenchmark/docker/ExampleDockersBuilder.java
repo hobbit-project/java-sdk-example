@@ -29,9 +29,9 @@ public class ExampleDockersBuilder extends DynamicDockerFileBuilder {
         //user-friendly name for searching in logs
         containerName(runnerClass.getSimpleName());
         //temp docker file will be created there
-        buildDirectory("target");
+        buildDirectory(".");
         //should be packaged will all dependencies (via 'mvn package' command)
-        jarFileName("sdk-example-benchmark-1.0.jar");
+        jarFilePath("target/sdk-example-benchmark-1.0.jar");
         //will be placed in temp dockerFile
         dockerWorkDir("/usr/src/"+PROJECT_NAME);
         //will be placed in temp dockerFile

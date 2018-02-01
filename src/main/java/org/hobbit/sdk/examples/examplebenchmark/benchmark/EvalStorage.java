@@ -29,7 +29,7 @@ public class EvalStorage extends AbstractEvaluationStorage {
 
     @Override
     public void receiveExpectedResponseData(String s, long l, byte[] bytes) {
-        logger.debug("receiveExpectedResponseData()->{}",new String(bytes));
+        logger.trace("receiveExpectedResponseData()->{}",new String(bytes));
         int actualSize = bytes.length / 1024;
         expectedResponses.add(new SerializableResult(l,bytes));
     }
@@ -37,7 +37,7 @@ public class EvalStorage extends AbstractEvaluationStorage {
     @Override
     public void receiveResponseData(String s, long l, byte[] bytes) {
         int actualSize = bytes.length / 1024;
-        logger.debug("receiveResponseData()->{}",new String(bytes));
+        logger.trace("receiveResponseData()->{}",new String(bytes));
         actualResponses.add(new SerializableResult(l,bytes));
     }
 

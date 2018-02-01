@@ -25,7 +25,7 @@ public class EvalModule extends AbstractEvaluationModule {
     @Override
     protected void evaluateResponse(byte[] expectedData, byte[] receivedData, long taskSentTimestamp, long responseReceivedTimestamp) throws Exception {
         // evaluate the given response and store the result, e.g., increment internal counters
-        logger.debug("evaluateResponse()");
+        logger.trace("evaluateResponse()");
     }
 
     @Override

@@ -34,7 +34,7 @@ public class DataGenerator extends AbstractDataGenerator {
             data = new String("data_"+String.valueOf(i));
 
             // the data can be sent to the task generator(s) ...
-            logger.debug("sendDataToTaskGenerator()->{}",data);
+            logger.trace("sendDataToTaskGenerator()->{}",data);
             sendDataToTaskGenerator(data.getBytes());
             // an to system adapter
             //logger.debug("sendDataToSystemAdapter()->{}",data);
