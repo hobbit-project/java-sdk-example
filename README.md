@@ -1,10 +1,10 @@
 # HOBBIT Java SDK Example kit
 
-This repository contains the starting kit for [HOBBIT components](https://github.com/hobbit-project/platform/wiki/Develop-a-benchmark-component-in-Java) development using the proposed [HOBBIT Java SDK](https://github.com/hobbit-project/java-sdk) library.
+This repository contains the starting kit of all types of [HOBBIT-compatible components](https://github.com/hobbit-project/platform/wiki/Develop-a-benchmark-component-in-Java) and number of tests, which should ease applications development for the [HOBBIT platform](https://github.com/hobbit-project/platform/wiki).
 
-The repository may be cloned and used as basis for every new project (benchmark or system) on the HOBBIT Platform.
+The repository may be cloned and used as HOBBIT-compatible basis for the future project (benchmark or system).
 
-The advantages of applying the Java SDK against the standard approach decribed [here](https://github.com/hobbit-project/java-sdk-example/blob/master/SDK_vs_Standard_Way.pdf).
+The added value of the Java SDK against standart HOBBIT approach decribed [here](https://github.com/hobbit-project/java-sdk-example/blob/master/SDK_vs_Standard_Way.pdf).
 
 # Usage
 ## Before you start
