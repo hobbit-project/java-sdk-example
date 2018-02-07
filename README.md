@@ -11,8 +11,8 @@ The added value of the Java SDK against standart HOBBIT approach decribed [here]
 1) Make sure that Oracle Java 1.8 (or higher) is installed (`java -version`). Or install it by the `sudo add-apt-repository ppa:webupd8team/java && sudo apt-get update && sudo apt-get install oracle-java8-installer -y`.
 2) Make sure that docker (v17 and later) is installed (or install it by `sudo curl -sSL https://get.docker.com/ | sh`)
 3) Make sure that maven (v3 and later) is installed (or install it by `sudo apt-get install maven`)
-4) Clone this repository (`git clone https://github.com/hobbit-project/java-sdk-example.git`)
-5) Add the `127.0.0.1 rabbit` line to `/etc/hosts` (Linux) or `C:\Windows\System32\drivers\etc` (Windows)
+4) Add the `127.0.0.1 rabbit` line to `/etc/hosts` (Linux) or `C:\Windows\System32\drivers\etc\hosts` (Windows)
+5) Clone this repository (`git clone https://github.com/hobbit-project/java-sdk-example.git`)
 6) Make sure that hobbit-java-sdk dependency (declared in [pom.xml](https://github.com/hobbit-project/java-sdk-example/blob/master/pom.xml)) is installed into your local maven repository (or install it by `mvn validate`)
 
 ## How to create a benchmark
