@@ -27,8 +27,8 @@ The added value of the Java SDK against standart HOBBIT approach decribed [here]
 ## How to create a system for existing benchmark
 If benchmark designer provides URLs of docker images for all the components of the benchmark or you have such images locally, then you can run your system under particular benchmark workload. If you have source codes of the benchmark you may eigher build these images locally or use the components as pure java code - please refer the section above: 
 1) Specify image names for pull-based dockerizers (see the [ExampleSystemTest.java](https://github.com/hobbit-project/java-sdk-example/blob/master/src/test/java/org/hobbit/sdk/examples/examplebenchmark/ExampleSystemTest.java)). If benchmark does not contain the full amount of components, when remove the omited components from MultipleCommandsReaction.
-2) Run the `checkHealth()` method from [ExampleSystemTest.java](https://github.com/hobbit-project/java-sdk-example/blob/master/src/test/java/org/hobbit/sdk/examples/examplebenchmark/ExampleSystemTest.java) to debug your system as pure java code. 
-3) Once your system works well as pure java code you may test it being packed into docker container. Please refer to the points 2-7 from the section above. 
+2) Run the `checkHealth()` test from [ExampleSystemTest.java](https://github.com/hobbit-project/java-sdk-example/blob/master/src/test/java/org/hobbit/sdk/examples/examplebenchmark/ExampleSystemTest.java) to debug your system as pure java code. 
+3) Once your system works well as pure java code you may test it being packed into docker container (run the `checkHealthDockerized()` test from [ExampleSystemTest.java](https://github.com/hobbit-project/java-sdk-example/blob/master/src/test/java/org/hobbit/sdk/examples/examplebenchmark/ExampleSystemTest.java)). To configure image settings please refer to the points 2-7 from the section above. 
 
 ## FAQ
 If `checkHealth()` methods hangs up, then search for the errors (via Ctrl+F) in console output. Components execution is parallel, so errors may be shown not in the bottom ot the output.
