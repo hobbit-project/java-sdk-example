@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
 
 
 public class EvalModule extends AbstractEvaluationModule {
-    private static final Logger logger = LoggerFactory.getLogger(org.hobbit.sdk.examples.dummybenchmark.DummyEvalModule.class);
+    private static final Logger logger = LoggerFactory.getLogger(EvalModule.class);
 
 
     @Override

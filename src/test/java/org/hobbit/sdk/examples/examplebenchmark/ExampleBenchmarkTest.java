@@ -60,12 +60,12 @@ public class ExampleBenchmarkTest extends EnvironmentVariablesWrapper {
     public void buildImages() throws Exception {
 
         init(false);
-        benchmarkBuilder.build().prepareImage();
-        dataGeneratorBuilder.build().prepareImage();
-        taskGeneratorBuilder.build().prepareImage();
-        evalStorageBuilder.build().prepareImage();
+//        benchmarkBuilder.build().prepareImage();
+//        dataGeneratorBuilder.build().prepareImage();
+//        taskGeneratorBuilder.build().prepareImage();
+//        evalStorageBuilder.build().prepareImage();
         evalModuleBuilder.build().prepareImage();
-        systemAdapterBuilder.build().prepareImage();
+//        systemAdapterBuilder.build().prepareImage();
     }
 
     @Test
@@ -130,8 +130,6 @@ public class ExampleBenchmarkTest extends EnvironmentVariablesWrapper {
         componentsExecutor.submit(systemAdapter, systemAdapterBuilder.getImageName());
 
         commandQueueListener.waitForTermination();
-        commandQueueListener.terminate();
-        componentsExecutor.shutdown();
 
         rabbitMqDockerizer.stop();
 

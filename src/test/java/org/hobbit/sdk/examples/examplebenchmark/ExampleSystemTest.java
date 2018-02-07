@@ -20,14 +20,14 @@ import org.junit.Test;
 import java.util.Date;
 
 import static org.hobbit.sdk.CommonConstants.*;
-import static org.hobbit.sdk.examples.dummybenchmark.docker.DummyDockersBuilder.SYSTEM_URI;
-import static org.hobbit.sdk.examples.examplebenchmark.docker.ExampleDockersBuilder.SYSTEM_IMAGE_NAME;
+import static org.hobbit.sdk.examples.examplebenchmark.docker.ExampleDockersBuilder.*;
+
 
 
 /**
  * @author Pavel Smirnov
  *
- * This test shows how to debug your system under already published benchmark images (sml-v2 benchmark)
+ * This test shows how to debug your system under already published benchmark images
  * if docker images of benchmarkController components are available online
  *
  *
@@ -41,11 +41,7 @@ public class ExampleSystemTest extends EnvironmentVariablesWrapper {
     private CommandQueueListener commandQueueListener;
 
 
-    String benchmarkImageName = "git.project-hobbit.eu:4567/smirnp/sml-v2/benchmark-controller";
-    String dataGeneratorImageName = "git.project-hobbit.eu:4567/smirnp/sml-v2/data-generator";
-    String taskGeneratorImageName = "git.project-hobbit.eu:4567/smirnp/sml-v2/task-generator";
-    String evalStorageImageName = "git.project-hobbit.eu:4567/smirnp/sml-v2/eval-storage";
-    String evalModuleImageName = "git.project-hobbit.eu:4567/smirnp/sml-v2/eval-module";
+
 
     BenchmarkDockerBuilder benchmarkBuilder;
     DataGenDockerBuilder dataGeneratorBuilder;
@@ -54,15 +50,42 @@ public class ExampleSystemTest extends EnvironmentVariablesWrapper {
     SystemAdapterDockerBuilder systemAdapterBuilder;
     EvalModuleDockerBuilder evalModuleBuilder;
 
-    Component benchmarkController;
-    Component dataGen;
-    Component taskGen;
-    Component evalStorage;
-    Component evalModule;
-    Component systemAdapter;
-
 
     public void init(boolean useCachedImages) throws Exception {
+
+        benchmarkBuilder = new BenchmarkDockerBuilder(new PullBasedDockersBuilder(BENCHMARK_IMAGE_NAME));
+        dataGeneratorBuilder = new DataGenDockerBuilder(new PullBasedDockersBuilder(DATAGEN_IMAGE_NAME));
+        taskGeneratorBuilder = new TaskGenDockerBuilder(new PullBasedDockersBuilder(TASKGEN_IMAGE_NAME));
+        evalStorageBuilder = new EvalStorageDockerBuilder(new PullBasedDockersBuilder(EVAL_STORAGE_IMAGE_NAME));
+        evalModuleBuilder = new EvalModuleDockerBuilder(new PullBasedDockersBuilder(EVALMODULE_IMAGE_NAME));
+
+        systemAdapterBuilder = new SystemAdapterDockerBuilder(new ExampleDockersBuilder(SystemAdapter.class, SYSTEM_IMAGE_NAME).useCachedImage(useCachedImages));
+
+    }
+
+    @Test
+    @Ignore
+    public void buildImages() throws Exception {
+        init(false);
+        systemAdapterBuilder.build().prepareImage();
+    }
+
+    @Test
+    public void checkHealth() throws Exception {
+        checkHealth(false);
+    }
+
+    @Test
+    public void checkHealthDockerized() throws Exception {
+        checkHealth(true);
+    }
+
+
+    private void checkHealth(boolean dockerize) throws Exception {
+
+        Boolean useCachedImages = true;
+
+        init(useCachedImages);
 
         rabbitMqDockerizer = RabbitMqDockerizer.builder().build();
 
@@ -71,40 +94,20 @@ public class ExampleSystemTest extends EnvironmentVariablesWrapper {
         setupGeneratorEnvironmentVariables(1,1);
         setupSystemEnvironmentVariables(SYSTEM_URI, createSystemParameters());
 
-        benchmarkBuilder = new BenchmarkDockerBuilder(new PullBasedDockersBuilder(benchmarkImageName));
-        dataGeneratorBuilder = new DataGenDockerBuilder(new PullBasedDockersBuilder(dataGeneratorImageName));
-        taskGeneratorBuilder = new TaskGenDockerBuilder(new PullBasedDockersBuilder(taskGeneratorImageName));
-        evalStorageBuilder = new EvalStorageDockerBuilder(new PullBasedDockersBuilder(evalStorageImageName));
-        evalModuleBuilder = new EvalModuleDockerBuilder(new PullBasedDockersBuilder(evalModuleImageName));
-
-        systemAdapterBuilder = new SystemAdapterDockerBuilder(new ExampleDockersBuilder(SystemAdapter.class, SYSTEM_IMAGE_NAME).useCachedImage(useCachedImages));
-
-        benchmarkController = benchmarkBuilder.build();
-        dataGen = dataGeneratorBuilder.build();
-        taskGen = taskGeneratorBuilder.build();
-        evalStorage = evalStorageBuilder.build();
-        evalModule = evalModuleBuilder.build();
-        systemAdapter = systemAdapterBuilder.build();
-    }
-
-    @Test
-    @Ignore
-    public void buildImages() throws Exception {
-        init(false);
-        ((AbstractDockerizer)systemAdapter).prepareImage();
-    }
-
-    @Test
-    public void checkHealth() throws Exception {
-
-        Boolean useCachedImages = true;
-
-        init(useCachedImages);
-
         commandQueueListener = new CommandQueueListener();
         componentsExecutor = new ComponentsExecutor(commandQueueListener, environmentVariables);
 
         rabbitMqDockerizer.run();
+
+        Component benchmarkController = benchmarkBuilder.build();
+        Component dataGen = dataGeneratorBuilder.build();
+        Component taskGen = taskGeneratorBuilder.build();
+        Component evalStorage = evalStorageBuilder.build();
+        Component evalModule = evalModuleBuilder.build();
+        Component systemAdapter = new SystemAdapter();
+
+        if(dockerize)
+            systemAdapter = systemAdapterBuilder.build();
 
         commandQueueListener.setCommandReactions(
                 new MultipleCommandsReaction(componentsExecutor, commandQueueListener)
@@ -118,15 +121,10 @@ public class ExampleSystemTest extends EnvironmentVariablesWrapper {
         componentsExecutor.submit(commandQueueListener);
         commandQueueListener.waitForInitialisation();
 
-        //Here you can switch between dockerized (by default) and pure java code of your system
-        //systemAdapter = new SystemAdapter();
-
         componentsExecutor.submit(benchmarkController);
         componentsExecutor.submit(systemAdapter, systemAdapterBuilder.getImageName());
 
         commandQueueListener.waitForTermination();
-        commandQueueListener.terminate();
-        componentsExecutor.shutdown();
 
         rabbitMqDockerizer.stop();
 
@@ -135,13 +133,13 @@ public class ExampleSystemTest extends EnvironmentVariablesWrapper {
 
     public JenaKeyValue createBenchmarkParameters() {
         JenaKeyValue kv = new JenaKeyValue();
-        //kv.setValue(BENCHMARK_MODE_INPUT_NAME, BENCHMARK_MODE_DYNAMIC+":10:1");
+        kv.setValue(BENCHMARK_URI+"/param1", "value1");
         return kv;
     }
 
     private static JenaKeyValue createSystemParameters(){
         JenaKeyValue kv = new JenaKeyValue();
-        //kv.setValue(BENCHMARK_MODE_INPUT_NAME, BENCHMARK_MODE_DYNAMIC+":10:1");
+        kv.setValue(SYSTEM_URI+"/param1", "value1");
         return kv;
     }
 
