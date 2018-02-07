@@ -8,10 +8,11 @@ The added value of the Java SDK against standart HOBBIT approach decribed [here]
 
 # Usage
 ## Before you start
-1) Make sure that docker (v17 and later) is installed (or install it by `sudo curl -sSL https://get.docker.com/ | sh`)
-2) Make sure that maven (v3 and later) is installed (or install it by `sudo apt-get install maven`)
-3) Clone this repository (`git clone https://github.com/hobbit-project/java-sdk-example.git`)
-4) Make sure that hobbit-java-sdk dependency (declared in [pom.xml](https://github.com/hobbit-project/java-sdk-example/blob/master/pom.xml)) is installed into your local maven repository (or install it by `mvn validate`)
+1) Make sure that Java 1.8 (Oracle) is installed (`java -version`). Or install it by the `sudo add-apt-repository ppa:webupd8team/java && sudo apt-get update && sudo apt-get install oracle-java8-installer -y`.
+2) Make sure that docker (v17 and later) is installed (or install it by `sudo curl -sSL https://get.docker.com/ | sh`)
+3) Make sure that maven (v3 and later) is installed (or install it by `sudo apt-get install maven`)
+4) Clone this repository (`git clone https://github.com/hobbit-project/java-sdk-example.git`)
+5) Make sure that hobbit-java-sdk dependency (declared in [pom.xml](https://github.com/hobbit-project/java-sdk-example/blob/master/pom.xml)) is installed into your local maven repository (or install it by `mvn validate`)
 
 ## How to create a benchmark
 1) Please find the basic benchmark component implementations in the [sources filder](https://github.com/hobbit-project/java-sdk-example/tree/master/src/main/java/org/hobbit/sdk/examples/examplebenchmark/benchmark). You may extend the components with logic of your benchmark and debug the components as pure java codes by running the `checkHealth()` method from [ExampleBenchmarkTest](https://github.com/hobbit-project/java-sdk-example/blob/master/src/test/java/org/hobbit/sdk/examples/ExampleBenchmarkTest.java)). You may specify input parameters models for benchmark and system you are running.
