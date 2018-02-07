@@ -1,8 +1,7 @@
 package org.hobbit.sdk.examples.examplebenchmark.docker;
 
 
-import org.hobbit.sdk.docker.BuildBasedDockerizer;
-import org.hobbit.sdk.docker.builders.common.DynamicDockerFileBuilder;
+import org.hobbit.sdk.docker.builders.DynamicDockerFileBuilder;
 
 /**
  * @author Pavel Smirnov
