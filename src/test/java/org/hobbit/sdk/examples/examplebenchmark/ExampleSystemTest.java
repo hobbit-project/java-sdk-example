@@ -9,7 +9,6 @@ import org.hobbit.sdk.docker.RabbitMqDockerizer;
 import org.hobbit.sdk.docker.builders.*;
 import org.hobbit.sdk.docker.builders.PullBasedDockersBuilder;
 import org.hobbit.sdk.docker.builders.hobbit.*;
-import org.hobbit.sdk.examples.examplebenchmark.docker.ExampleDockersBuilder;
 import org.hobbit.sdk.examples.examplebenchmark.system.SystemAdapter;
 import org.hobbit.sdk.utils.CommandQueueListener;
 import org.hobbit.sdk.utils.commandreactions.MultipleCommandsReaction;
@@ -20,8 +19,7 @@ import org.junit.Test;
 import java.util.Date;
 
 import static org.hobbit.sdk.CommonConstants.*;
-import static org.hobbit.sdk.examples.examplebenchmark.docker.ExampleDockersBuilder.*;
-
+import static org.hobbit.sdk.examples.examplebenchmark.Constants.*;
 
 
 /**

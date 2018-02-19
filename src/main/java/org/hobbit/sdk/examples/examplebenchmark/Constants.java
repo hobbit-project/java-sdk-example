@@ -1,8 +1,6 @@
 package org.hobbit.sdk.examples.examplebenchmark;
 
 
-import org.hobbit.sdk.docker.builders.DynamicDockerFileBuilder;
-
 /**
  * @author Pavel Smirnov
  */

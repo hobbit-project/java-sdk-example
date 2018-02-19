@@ -5,13 +5,12 @@ import org.apache.jena.rdf.model.NodeIterator;
 import org.hobbit.core.Commands;
 import org.hobbit.core.components.AbstractBenchmarkController;
 import org.hobbit.sdk.JenaKeyValue;
-import org.hobbit.sdk.examples.examplebenchmark.docker.ExampleDockersBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
-import static org.hobbit.sdk.examples.examplebenchmark.docker.ExampleDockersBuilder.EVAL_STORAGE_IMAGE_NAME;
+import static org.hobbit.sdk.examples.examplebenchmark.Constants.*;
 
 
 public class BenchmarkController extends AbstractBenchmarkController {
@@ -39,7 +38,7 @@ public class BenchmarkController extends AbstractBenchmarkController {
         String[] envVariables = new String[]{"key1=value1" };
 
         logger.debug("createDataGenerators()");
-        createDataGenerators(ExampleDockersBuilder.DATAGEN_IMAGE_NAME, numberOfDataGenerators, envVariables);
+        createDataGenerators(DATAGEN_IMAGE_NAME, numberOfDataGenerators, envVariables);
 
 
         // Create task generators
@@ -47,7 +46,7 @@ public class BenchmarkController extends AbstractBenchmarkController {
         envVariables = new String[]{"key1=value1" };
 
         logger.debug("createTaskGenerators()");
-        createTaskGenerators(ExampleDockersBuilder.TASKGEN_IMAGE_NAME, numberOfTaskGenerators, envVariables);
+        createTaskGenerators(TASKGEN_IMAGE_NAME, numberOfTaskGenerators, envVariables);
 
         // Create evaluation storage
         logger.debug("createEvaluationStorage()");
@@ -98,7 +97,7 @@ public class BenchmarkController extends AbstractBenchmarkController {
         // Create the evaluation module
 
         String[] envVariables = new String[]{"key1=value1" };
-        createEvaluationModule(ExampleDockersBuilder.EVALMODULE_IMAGE_NAME, envVariables);
+        createEvaluationModule(EVALMODULE_IMAGE_NAME, envVariables);
 
 
         // wait for the evaluation to finish

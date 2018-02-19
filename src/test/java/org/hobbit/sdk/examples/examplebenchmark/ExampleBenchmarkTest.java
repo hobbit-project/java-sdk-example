@@ -9,7 +9,6 @@ import org.hobbit.sdk.docker.RabbitMqDockerizer;
 import org.hobbit.sdk.docker.builders.*;
 import org.hobbit.sdk.docker.builders.hobbit.*;
 import org.hobbit.sdk.examples.examplebenchmark.benchmark.*;
-import org.hobbit.sdk.examples.examplebenchmark.docker.ExampleDockersBuilder;
 import org.hobbit.sdk.examples.examplebenchmark.system.SystemAdapter;
 import org.hobbit.sdk.utils.CommandQueueListener;
 import org.hobbit.sdk.utils.commandreactions.MultipleCommandsReaction;
@@ -20,8 +19,7 @@ import org.junit.Test;
 import java.util.Date;
 
 import static org.hobbit.sdk.CommonConstants.*;
-import static org.hobbit.sdk.examples.dummybenchmark.docker.DummyDockersBuilder.SYSTEM_URI;
-import static org.hobbit.sdk.examples.examplebenchmark.docker.ExampleDockersBuilder.*;
+import static org.hobbit.sdk.examples.examplebenchmark.Constants.*;
 
 /**
  * @author Pavel Smirnov
@@ -60,12 +58,12 @@ public class ExampleBenchmarkTest extends EnvironmentVariablesWrapper {
     public void buildImages() throws Exception {
 
         init(false);
-//        benchmarkBuilder.build().prepareImage();
-//        dataGeneratorBuilder.build().prepareImage();
-//        taskGeneratorBuilder.build().prepareImage();
-//        evalStorageBuilder.build().prepareImage();
+        benchmarkBuilder.build().prepareImage();
+        dataGeneratorBuilder.build().prepareImage();
+        taskGeneratorBuilder.build().prepareImage();
+        evalStorageBuilder.build().prepareImage();
         evalModuleBuilder.build().prepareImage();
-//        systemAdapterBuilder.build().prepareImage();
+        systemAdapterBuilder.build().prepareImage();
     }
 
     @Test
