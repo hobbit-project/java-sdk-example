@@ -1,25 +1,27 @@
 package org.hobbit.sdk.examples.examplebenchmark.benchmark;
 
 import org.hobbit.core.components.AbstractEvaluationStorage;
-import org.hobbit.core.data.Result;
 import org.hobbit.core.data.ResultPair;
-import org.hobbit.sdk.ResultPairImpl;
-import org.hobbit.sdk.SerializableResult;
+import org.hobbit.sdk.evalStorage.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
+/**
+ * Simple in-memory implementation of an evaluation storage that can be used for
+ * testing purposes.
+ *
+ * @author Michael R&ouml;der (roeder@informatik.uni-leipzig.de)
+ * https://github.com/hobbit-project/core/blob/master/src/main/java/org/hobbit/core/components/test/InMemoryEvaluationStore.java
+ */
 
 public class EvalStorage extends AbstractEvaluationStorage {
     private static final Logger logger = LoggerFactory.getLogger(EvalStorage.class);
-    protected Exception exception;
-
-    private static final int MAX_OBJECT_SIZE = 100 * 1024; // 100mb
-
-    private final List<Result> actualResponses = new ArrayList<>();
-    private final List<Result> expectedResponses = new ArrayList<>();
-
+    /**
+     * Map containing a mapping from task Ids to result pairs.
+     */
+    private Map<String, ResultPair> results = Collections.synchronizedMap(new HashMap<String, ResultPair>());
 
     @Override
     public void init() throws Exception {
@@ -28,31 +30,50 @@ public class EvalStorage extends AbstractEvaluationStorage {
     }
 
     @Override
-    public void receiveExpectedResponseData(String s, long l, byte[] bytes) {
-        logger.trace("receiveExpectedResponseData()->{}",new String(bytes));
-        int actualSize = bytes.length / 1024;
-        expectedResponses.add(new SerializableResult(l,bytes));
+    public void receiveResponseData(String taskId, long timestamp, byte[] data) {
+        logger.trace("receiveResponseData()->{}",new String(data));
+        putResult(false, taskId, timestamp, data);
     }
 
     @Override
-    public void receiveResponseData(String s, long l, byte[] bytes) {
-        int actualSize = bytes.length / 1024;
-        logger.trace("receiveResponseData()->{}",new String(bytes));
-        actualResponses.add(new SerializableResult(l,bytes));
+    public void receiveExpectedResponseData(String taskId, long timestamp, byte[] data) {
+        logger.trace("receiveExpectedResponseData()->{}",new String(data));
+        putResult(true, taskId, timestamp, data);
+    }
+
+    /**
+     * Adds the given result to the map of results.
+     *
+     * @param isExpectedResult
+     *            true if the result has been received from a task generator,
+     *            i.e., is the expected result for a task
+     * @param taskId
+     *            id of the task
+     * @param timestamp
+     *            time stamp for the task result
+     * @param data
+     *            the result
+     */
+    public synchronized void putResult(boolean isExpectedResult, String taskId, long timestamp, byte[] data) {
+        ResultPairImpl pair;
+        if (results.containsKey(taskId)) {
+            pair = (ResultPairImpl) results.get(taskId);
+        } else {
+            pair = new ResultPairImpl();
+            results.put(taskId, pair);
+        }
+        if (isExpectedResult) {
+            pair.setExpected(new ResultImpl(timestamp, data));
+        } else {
+            pair.setActual(new ResultImpl(timestamp, data));
+        }
     }
 
     @Override
-    protected Iterator<ResultPair> createIterator(){
-        logger.debug("createIterator()");
-        String test="123";
-
-        List<ResultPair> ret = new ArrayList<>();
-        for(int i = 0; i< expectedResponses.size(); i++)
-            ret.add(new ResultPairImpl(expectedResponses.get(i), actualResponses.get(i)));
-
-        return ret.iterator();
+    protected Iterator<ResultPair> createIterator() {
+        logger.trace("createIterator()->{} items",results.size());
+        return results.values().iterator();
     }
-
-
 
 }
+

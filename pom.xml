@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.hobbit.sdk</groupId>
     <artifactId>sdk-example-benchmark</artifactId>
-    <version>1.0</version>
+    <version>1.0.1</version>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.target>1.8</maven.compiler.target>
@@ -37,7 +37,7 @@
         <dependency>
             <groupId>org.hobbit</groupId>
             <artifactId>hobbit-java-sdk</artifactId>
-            <version>1.1.1</version>
+            <version>1.1.2</version>
         </dependency>
 
 
