@@ -1,16 +1,17 @@
 package org.hobbit.sdk.examples.examplebenchmark;
 
 import org.hobbit.core.components.Component;
-import org.hobbit.sdk.ComponentsExecutor;
 import org.hobbit.sdk.EnvironmentVariablesWrapper;
 import org.hobbit.sdk.JenaKeyValue;
 import org.hobbit.sdk.docker.AbstractDockerizer;
+import org.hobbit.sdk.docker.MultiThreadedImageBuilder;
 import org.hobbit.sdk.docker.RabbitMqDockerizer;
 import org.hobbit.sdk.docker.builders.*;
 import org.hobbit.sdk.docker.builders.hobbit.*;
 import org.hobbit.sdk.examples.examplebenchmark.benchmark.*;
 import org.hobbit.sdk.examples.examplebenchmark.system.SystemAdapter;
 import org.hobbit.sdk.utils.CommandQueueListener;
+import org.hobbit.sdk.utils.ComponentsExecutor;
 import org.hobbit.sdk.utils.commandreactions.MultipleCommandsReaction;
 import org.junit.Assert;
 import org.junit.Ignore;
@@ -18,6 +19,8 @@ import org.junit.Test;
 
 import java.util.Date;
 
+import static org.hobbit.core.Constants.BENCHMARK_PARAMETERS_MODEL_KEY;
+import static org.hobbit.core.Constants.SYSTEM_PARAMETERS_MODEL_KEY;
 import static org.hobbit.sdk.CommonConstants.*;
 import static org.hobbit.sdk.examples.examplebenchmark.Constants.*;
 
@@ -58,12 +61,16 @@ public class ExampleBenchmarkTest extends EnvironmentVariablesWrapper {
     public void buildImages() throws Exception {
 
         init(false);
-        benchmarkBuilder.build().prepareImage();
-        dataGeneratorBuilder.build().prepareImage();
-        taskGeneratorBuilder.build().prepareImage();
-        evalStorageBuilder.build().prepareImage();
-        evalModuleBuilder.build().prepareImage();
-        systemAdapterBuilder.build().prepareImage();
+
+        MultiThreadedImageBuilder builder = new MultiThreadedImageBuilder(8);
+        builder.addTask(benchmarkBuilder);
+        builder.addTask(dataGeneratorBuilder);
+        builder.addTask(taskGeneratorBuilder);
+        builder.addTask(evalStorageBuilder);
+        builder.addTask(systemAdapterBuilder);
+        builder.addTask(evalModuleBuilder);
+        builder.build();
+
     }
 
     @Test
@@ -107,25 +114,28 @@ public class ExampleBenchmarkTest extends EnvironmentVariablesWrapper {
         }
 
         commandQueueListener = new CommandQueueListener();
-        componentsExecutor = new ComponentsExecutor(commandQueueListener, environmentVariables);
+        componentsExecutor = new ComponentsExecutor();
 
         rabbitMqDockerizer.run();
 
 
         commandQueueListener.setCommandReactions(
-                new MultipleCommandsReaction(componentsExecutor, commandQueueListener)
+                new MultipleCommandsReaction.Builder(componentsExecutor, commandQueueListener)
+                        .benchmarkController(benchmarkController).benchmarkControllerImageName(BENCHMARK_IMAGE_NAME)
                         .dataGenerator(dataGen).dataGeneratorImageName(dataGeneratorBuilder.getImageName())
                         .taskGenerator(taskGen).taskGeneratorImageName(taskGeneratorBuilder.getImageName())
                         .evalStorage(evalStorage).evalStorageImageName(evalStorageBuilder.getImageName())
                         .evalModule(evalModule).evalModuleImageName(evalModuleBuilder.getImageName())
-                        .systemContainerId(systemAdapterBuilder.getImageName())
+                        .systemAdapter(systemAdapter).systemAdapterImageName(SYSTEM_IMAGE_NAME)
+                        .build()
         );
 
         componentsExecutor.submit(commandQueueListener);
         commandQueueListener.waitForInitialisation();
 
-        componentsExecutor.submit(benchmarkController);
-        componentsExecutor.submit(systemAdapter, systemAdapterBuilder.getImageName());
+        commandQueueListener.submit(BENCHMARK_IMAGE_NAME, new String[]{ BENCHMARK_PARAMETERS_MODEL_KEY+"="+ createBenchmarkParameters() });
+        commandQueueListener.submit(SYSTEM_IMAGE_NAME, new String[]{ SYSTEM_PARAMETERS_MODEL_KEY+"="+ createSystemParameters() });
+
 
         commandQueueListener.waitForTermination();
 
@@ -135,16 +145,16 @@ public class ExampleBenchmarkTest extends EnvironmentVariablesWrapper {
     }
 
 
-    public JenaKeyValue createBenchmarkParameters() {
+    public String createBenchmarkParameters() {
         JenaKeyValue kv = new JenaKeyValue();
         //kv.setValue(BENCHMARK_MODE_INPUT_NAME, BENCHMARK_MODE_DYNAMIC+":10:1");
-        return kv;
+        return kv.encodeToString();
     }
 
-    private static JenaKeyValue createSystemParameters(){
+    private static String createSystemParameters(){
         JenaKeyValue kv = new JenaKeyValue();
         //kv.setValue(BENCHMARK_MODE_INPUT_NAME, BENCHMARK_MODE_DYNAMIC+":10:1");
-        return kv;
+        return kv.encodeToString();
     }
 
 
