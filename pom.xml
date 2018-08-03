@@ -134,30 +134,6 @@
                     </execution>
                 </executions>
             </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-install-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>hack-binary</id>
-                        <phase>validate</phase>
-                        <configuration>
-                            <file>${project.basedir}/libs/hobbit-java-sdk-1.1.9.jar</file>
-                            <repositoryLayout>default</repositoryLayout>
-                            <groupId>org.hobbit</groupId>
-                            <artifactId>hobbit-java-sdk</artifactId>
-                            <version>1.1.9</version>
-                            <packaging>jar</packaging>
-                            <generatePom>true</generatePom>
-                        </configuration>
-                        <goals>
-                            <goal>install-file</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
         </plugins>
     </build>
 </project>
