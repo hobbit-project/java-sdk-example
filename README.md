@@ -13,7 +13,6 @@ The added value of the Java SDK against standart HOBBIT approach decribed [here]
 3) Make sure that maven (v3 and later) is installed (or install it by `sudo apt-get install maven`)
 4) Add the `127.0.0.1 rabbit` line to `/etc/hosts` (Linux) or `C:\Windows\System32\drivers\etc\hosts` (Windows)
 5) Clone this repository (`git clone https://github.com/hobbit-project/java-sdk-example.git`)
-6) Make sure that hobbit-java-sdk dependency (declared in [pom.xml](https://github.com/hobbit-project/java-sdk-example/blob/master/pom.xml)) is installed into your local maven repository (or install it by `mvn validate`)
 
 ## How to create a benchmark
 1) Please find the basic benchmark component implementations in the [sources folder](https://github.com/hobbit-project/java-sdk-example/tree/master/src/main/java/org/hobbit/sdk/examples/examplebenchmark/benchmark). You may extend the components with logic of your benchmark and debug the components as pure java codes by running the `checkHealth()` method from [ExampleBenchmarkTest](https://github.com/hobbit-project/java-sdk-example/blob/master/src/test/java/org/hobbit/sdk/examples/examplebenchmark/ExampleBenchmarkTest.java)). You may specify input parameters models for benchmark and system you are running.
