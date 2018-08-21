@@ -58,13 +58,10 @@ public class BenchmarkController extends AbstractBenchmarkController {
 
 
         // Wait for all components to finish their initialization
-        waitForComponents();
+        waitForComponentsToInitialize();
     }
 
-    private void waitForComponents() {
-        logger.debug("waitForComponents()");
-        //throw new NotImplementedException();
-    }
+
 
     @Override
     protected void executeBenchmark() throws Exception {

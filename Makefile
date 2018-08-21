@@ -1,11 +1,13 @@
 test-benchmark:
-	mvn -Dtest=ExampleBenchmarkTest#checkHealth test
+	mvn -Dtest=BenchmarkTest#checkHealth test
 
 package-benchmark:
 	mvn -DskipTests package
 
 build-benchmark-image:
-	mvn -Dtest=ExampleBenchmarkTest#buildImages test
+	mvn -Dtest=BenchmarkTest#buildImages test
 
 test-dockerized-benchmark:
-	mvn -Dtest=ExampleBenchmarkTest#checkHealthDockerized test
+	make package-benchmark
+	make build-benchmark-image
+	mvn -Dtest=BenchmarkTest#checkHealthDockerized test

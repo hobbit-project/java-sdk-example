@@ -12,7 +12,7 @@ import org.hobbit.sdk.examples.examplebenchmark.benchmark.*;
 import org.hobbit.sdk.examples.examplebenchmark.system.SystemAdapter;
 import org.hobbit.sdk.utils.CommandQueueListener;
 import org.hobbit.sdk.utils.ComponentsExecutor;
-import org.hobbit.sdk.utils.commandreactions.MultipleCommandsReaction;
+import org.hobbit.sdk.utils.commandreactions.CommandReactionsBuilder;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -20,6 +20,7 @@ import org.junit.Test;
 import java.util.Date;
 
 import static org.hobbit.core.Constants.BENCHMARK_PARAMETERS_MODEL_KEY;
+import static org.hobbit.core.Constants.HOBBIT_EXPERIMENT_URI_KEY;
 import static org.hobbit.core.Constants.SYSTEM_PARAMETERS_MODEL_KEY;
 import static org.hobbit.sdk.CommonConstants.*;
 import static org.hobbit.sdk.examples.examplebenchmark.Constants.*;
@@ -28,7 +29,7 @@ import static org.hobbit.sdk.examples.examplebenchmark.Constants.*;
  * @author Pavel Smirnov
  */
 
-public class ExampleBenchmarkTest extends EnvironmentVariablesWrapper {
+public class BenchmarkTest extends EnvironmentVariablesWrapper {
 
     private RabbitMqDockerizer rabbitMqDockerizer;
     private ComponentsExecutor componentsExecutor;
@@ -90,10 +91,8 @@ public class ExampleBenchmarkTest extends EnvironmentVariablesWrapper {
 
         rabbitMqDockerizer = RabbitMqDockerizer.builder().build();
 
-        setupCommunicationEnvironmentVariables(rabbitMqDockerizer.getHostName(), "session_"+String.valueOf(new Date().getTime()));
-        setupBenchmarkEnvironmentVariables(EXPERIMENT_URI, createBenchmarkParameters());
-        setupGeneratorEnvironmentVariables(1,1);
-        setupSystemEnvironmentVariables(SYSTEM_URI, createSystemParameters());
+        environmentVariables.set(org.hobbit.core.Constants.RABBIT_MQ_HOST_NAME_KEY, rabbitMqDockerizer.getHostName());
+        environmentVariables.set(org.hobbit.core.Constants.HOBBIT_SESSION_ID_KEY, "session_"+String.valueOf(new Date().getTime()));
 
 
         Component benchmarkController = new BenchmarkController();
@@ -119,23 +118,38 @@ public class ExampleBenchmarkTest extends EnvironmentVariablesWrapper {
         rabbitMqDockerizer.run();
 
 
-        commandQueueListener.setCommandReactions(
-                new MultipleCommandsReaction.Builder(componentsExecutor, commandQueueListener)
+        //comment the .systemAdapter(systemAdapter) line below to use the code for running from python
+        CommandReactionsBuilder commandReactionsBuilder = new CommandReactionsBuilder(componentsExecutor, commandQueueListener)
                         .benchmarkController(benchmarkController).benchmarkControllerImageName(BENCHMARK_IMAGE_NAME)
                         .dataGenerator(dataGen).dataGeneratorImageName(dataGeneratorBuilder.getImageName())
                         .taskGenerator(taskGen).taskGeneratorImageName(taskGeneratorBuilder.getImageName())
                         .evalStorage(evalStorage).evalStorageImageName(evalStorageBuilder.getImageName())
                         .evalModule(evalModule).evalModuleImageName(evalModuleBuilder.getImageName())
                         .systemAdapter(systemAdapter).systemAdapterImageName(SYSTEM_IMAGE_NAME)
-                        .build()
+                        //.customContainerImage(systemAdapter, DUMMY_SYSTEM_IMAGE_NAME)
+                ;
+
+        commandQueueListener.setCommandReactions(
+                commandReactionsBuilder.buildStartCommandsReaction(), //comment this if you want to run containers on a platform instance (if the platform is running)
+                commandReactionsBuilder.buildTerminateCommandsReaction(),
+                commandReactionsBuilder.buildPlatformCommandsReaction()
         );
 
         componentsExecutor.submit(commandQueueListener);
         commandQueueListener.waitForInitialisation();
 
-        commandQueueListener.submit(BENCHMARK_IMAGE_NAME, new String[]{ BENCHMARK_PARAMETERS_MODEL_KEY+"="+ createBenchmarkParameters() });
-        commandQueueListener.submit(SYSTEM_IMAGE_NAME, new String[]{ SYSTEM_PARAMETERS_MODEL_KEY+"="+ createSystemParameters() });
+        // Start components without sending command to queue. Components will be executed by SDK, not the running platform (if it is running)
+        String benchmarkContainerId = "benchmark";
+        componentsExecutor.submit(benchmarkController, benchmarkContainerId, new String[]{ HOBBIT_EXPERIMENT_URI_KEY+"="+EXPERIMENT_URI,  BENCHMARK_PARAMETERS_MODEL_KEY+"="+ createBenchmarkParameters() });
+        String systemContainerId = "system";
+        componentsExecutor.submit(systemAdapter, systemContainerId, new String[]{ SYSTEM_PARAMETERS_MODEL_KEY+"="+ createSystemParameters() });
 
+        //Alternative. Start components via command queue (will be executed by the platform (if running))
+//        String benchmarkContainerId = commandQueueListener.createContainer(benchmarkBuilder.getImageName(), "benchmark", new String[]{ HOBBIT_EXPERIMENT_URI_KEY+"="+EXPERIMENT_URI,  BENCHMARK_PARAMETERS_MODEL_KEY+"="+ createBenchmarkParameters() });
+//        String systemContainerId = commandQueueListener.createContainer(systemAdapterBuilder.getImageName(), "system" ,new String[]{ SYSTEM_PARAMETERS_MODEL_KEY+"="+ createSystemParameters() });
+
+        environmentVariables.set("BENCHMARK_CONTAINER_ID", benchmarkContainerId);
+        environmentVariables.set("SYSTEM_CONTAINER_ID", systemContainerId);
 
         commandQueueListener.waitForTermination();
 
@@ -145,15 +159,17 @@ public class ExampleBenchmarkTest extends EnvironmentVariablesWrapper {
     }
 
 
-    public String createBenchmarkParameters() {
+    public String createBenchmarkParameters(){
         JenaKeyValue kv = new JenaKeyValue();
-        //kv.setValue(BENCHMARK_MODE_INPUT_NAME, BENCHMARK_MODE_DYNAMIC+":10:1");
+        kv.setValue(BENCHMARK_URI+"benchmarkParam1", 123);
+        kv.setValue(BENCHMARK_URI+"benchmarkParam2", 456);
         return kv.encodeToString();
     }
 
-    private static String createSystemParameters(){
+    public String createSystemParameters(){
         JenaKeyValue kv = new JenaKeyValue();
-        //kv.setValue(BENCHMARK_MODE_INPUT_NAME, BENCHMARK_MODE_DYNAMIC+":10:1");
+        kv.setValue(SYSTEM_URI+"systemParam1", 123);
+        //kv.setValue(SYSTEM_URI+SYSTEM_CONTAINERS_COUNT_KEY, 2);
         return kv.encodeToString();
     }
 

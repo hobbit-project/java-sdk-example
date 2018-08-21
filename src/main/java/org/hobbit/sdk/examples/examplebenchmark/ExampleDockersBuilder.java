@@ -1,6 +1,7 @@
 package org.hobbit.sdk.examples.examplebenchmark;
 
 
+import org.hobbit.core.run.ComponentStarter;
 import org.hobbit.sdk.docker.builders.DynamicDockerFileBuilder;
 
 import static org.hobbit.sdk.examples.examplebenchmark.Constants.*;
@@ -24,7 +25,7 @@ public class ExampleDockersBuilder extends DynamicDockerFileBuilder {
         //will be placed in temp dockerFile
         dockerWorkDir(SDK_WORK_DIR_PATH);
         //will be placed in temp dockerFile
-        runnerClass(org.hobbit.core.run.ComponentStarter.class, runnerClass);
+        runnerClass(ComponentStarter.class, runnerClass);
     }
 
 }
