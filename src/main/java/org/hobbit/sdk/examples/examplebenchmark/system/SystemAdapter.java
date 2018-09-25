@@ -1,7 +1,7 @@
 package org.hobbit.sdk.examples.examplebenchmark.system;
 
+import org.apache.jena.rdf.model.NodeIterator;
 import org.hobbit.core.components.AbstractSystemAdapter;
-import org.hobbit.sdk.JenaKeyValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,16 +10,15 @@ import java.io.IOException;
 
 public class SystemAdapter extends AbstractSystemAdapter {
     private static final Logger logger = LoggerFactory.getLogger(SystemAdapter.class);
-    private static JenaKeyValue parameters;
 
     @Override
     public void init() throws Exception {
         super.init();
         logger.debug("Init()");
         // Your initialization code comes here...
-        parameters = new JenaKeyValue.Builder().buildFrom(systemParamModel);
-        logger.debug("SystemModel: "+parameters.encodeToString());
         // You can access the RDF model this.systemParamModel to retrieve meta data about this system adapter
+        NodeIterator iterator = systemParamModel.listObjectsOfProperty(systemParamModel
+                .getProperty("http://example.org/myParameter"));
     }
 
     @Override

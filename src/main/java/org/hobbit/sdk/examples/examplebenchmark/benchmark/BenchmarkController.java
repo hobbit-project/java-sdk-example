@@ -1,10 +1,9 @@
 package org.hobbit.sdk.examples.examplebenchmark.benchmark;
 
-import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.jena.rdf.model.NodeIterator;
 import org.hobbit.core.Commands;
 import org.hobbit.core.components.AbstractBenchmarkController;
-import org.hobbit.sdk.JenaKeyValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,15 +14,12 @@ import static org.hobbit.sdk.examples.examplebenchmark.Constants.*;
 
 public class BenchmarkController extends AbstractBenchmarkController {
     private static final Logger logger = LoggerFactory.getLogger(BenchmarkController.class);
-    private static JenaKeyValue parameters;
 
     @Override
     public void init() throws Exception {
         super.init();
         logger.debug("Init()");
 
-        parameters = new JenaKeyValue.Builder().buildFrom(benchmarkParamModel);
-        logger.debug("BenchmarkModel: "+parameters.encodeToString());
         // Your initialization code comes here...
 
         // You might want to load parameters from the benchmarks parameter model

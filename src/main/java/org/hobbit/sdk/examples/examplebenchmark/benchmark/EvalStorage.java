@@ -1,8 +1,8 @@
 package org.hobbit.sdk.examples.examplebenchmark.benchmark;
 
 import org.hobbit.core.components.AbstractEvaluationStorage;
+import org.hobbit.core.components.test.InMemoryEvaluationStore;
 import org.hobbit.core.data.ResultPair;
-import org.hobbit.sdk.evalStorage.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,17 +55,17 @@ public class EvalStorage extends AbstractEvaluationStorage {
      *            the result
      */
     public synchronized void putResult(boolean isExpectedResult, String taskId, long timestamp, byte[] data) {
-        ResultPairImpl pair;
+        InMemoryEvaluationStore.ResultPairImpl pair;
         if (results.containsKey(taskId)) {
-            pair = (ResultPairImpl) results.get(taskId);
+            pair = (InMemoryEvaluationStore.ResultPairImpl) results.get(taskId);
         } else {
-            pair = new ResultPairImpl();
+            pair = new InMemoryEvaluationStore.ResultPairImpl();
             results.put(taskId, pair);
         }
         if (isExpectedResult) {
-            pair.setExpected(new ResultImpl(timestamp, data));
+            pair.setExpected(new InMemoryEvaluationStore.ResultImpl(timestamp, data));
         } else {
-            pair.setActual(new ResultImpl(timestamp, data));
+            pair.setActual(new InMemoryEvaluationStore.ResultImpl(timestamp, data));
         }
     }
 

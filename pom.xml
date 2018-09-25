@@ -33,11 +33,27 @@
     </repositories>
 
     <dependencies>
+
+        <dependency>
+            <groupId>org.hobbit</groupId>
+            <artifactId>core</artifactId>
+            <version>1.0.12</version>
+        </dependency>
+
         <dependency>
             <groupId>org.hobbit</groupId>
             <artifactId>hobbit-java-sdk</artifactId>
             <version>1.1.12</version>
+            <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>com.spotify</groupId>
+            <artifactId>docker-client</artifactId>
+            <version>8.11.7</version>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
     <build>
