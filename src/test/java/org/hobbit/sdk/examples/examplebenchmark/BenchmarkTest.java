@@ -61,16 +61,16 @@ public class BenchmarkTest extends EnvironmentVariablesWrapper {
     public void buildImages() throws Exception {
 
         init(false);
-        benchmarkBuilder.build().prepareImage();
+        //benchmarkBuilder.build().prepareImage();
 
-//        MultiThreadedImageBuilder builder = new MultiThreadedImageBuilder(8);
-//        builder.addTask(benchmarkBuilder);
-//        builder.addTask(dataGeneratorBuilder);
-//        builder.addTask(taskGeneratorBuilder);
-//        builder.addTask(evalStorageBuilder);
-//        builder.addTask(systemAdapterBuilder);
-//        builder.addTask(evalModuleBuilder);
-//        builder.build();
+        MultiThreadedImageBuilder builder = new MultiThreadedImageBuilder(8);
+        builder.addTask(benchmarkBuilder);
+        builder.addTask(dataGeneratorBuilder);
+        builder.addTask(taskGeneratorBuilder);
+        builder.addTask(evalStorageBuilder);
+        builder.addTask(systemAdapterBuilder);
+        builder.addTask(evalModuleBuilder);
+        builder.build();
 
     }
 
