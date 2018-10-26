@@ -18,10 +18,7 @@ import org.junit.Test;
 
 import java.util.Date;
 
-import static org.hobbit.core.Constants.BENCHMARK_PARAMETERS_MODEL_KEY;
-import static org.hobbit.core.Constants.HOBBIT_EXPERIMENT_URI_KEY;
-import static org.hobbit.core.Constants.SYSTEM_PARAMETERS_MODEL_KEY;
-import static org.hobbit.sdk.CommonConstants.*;
+import static org.hobbit.core.Constants.*;
 import static org.hobbit.sdk.examples.examplebenchmark.Constants.*;
 
 
@@ -122,9 +119,8 @@ public class SystemTest extends EnvironmentVariablesWrapper {
                 ;
 
         commandQueueListener.setCommandReactions(
-                commandReactionsBuilder.buildStartCommandsReaction(), //comment this if you want to run containers on a platform instance (if the platform is running)
-                commandReactionsBuilder.buildTerminateCommandsReaction(),
-                commandReactionsBuilder.buildPlatformCommandsReaction()
+                commandReactionsBuilder.containerCommandsReaction(), //comment this if you want to run containers on a platform instance (if the platform is running)
+                commandReactionsBuilder.benchmarkSignalsReaction()
         );
 
 
@@ -133,9 +129,9 @@ public class SystemTest extends EnvironmentVariablesWrapper {
 
         // Start components without sending command to queue. Components will be executed by SDK, not the running platform (if it is running)
         String benchmarkContainerId = "benchmark";
-        componentsExecutor.submit(benchmarkController, benchmarkContainerId, new String[]{ HOBBIT_EXPERIMENT_URI_KEY+"="+EXPERIMENT_URI,  BENCHMARK_PARAMETERS_MODEL_KEY+"="+ createBenchmarkParameters() });
-
         String systemContainerId = "system";
+
+        componentsExecutor.submit(benchmarkController, benchmarkContainerId, new String[]{ HOBBIT_EXPERIMENT_URI_KEY+"="+NEW_EXPERIMENT_URI,  BENCHMARK_PARAMETERS_MODEL_KEY+"="+ createBenchmarkParameters() });
         componentsExecutor.submit(systemAdapter, systemContainerId, new String[]{ SYSTEM_PARAMETERS_MODEL_KEY+"="+ createSystemParameters() });
 
         //Alternative. Start components via command queue (will be executed by the platform (if running))

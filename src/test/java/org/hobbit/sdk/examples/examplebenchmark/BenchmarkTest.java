@@ -4,14 +4,16 @@ import org.hobbit.core.components.Component;
 import org.hobbit.sdk.EnvironmentVariablesWrapper;
 import org.hobbit.sdk.JenaKeyValue;
 import org.hobbit.sdk.docker.AbstractDockerizer;
-import org.hobbit.sdk.docker.MultiThreadedImageBuilder;
 import org.hobbit.sdk.docker.RabbitMqDockerizer;
 import org.hobbit.sdk.docker.builders.*;
 import org.hobbit.sdk.docker.builders.hobbit.*;
+import org.hobbit.sdk.examples.dummybenchmark.test.DummyBenchmarkTestRunner;
 import org.hobbit.sdk.examples.examplebenchmark.benchmark.*;
 import org.hobbit.sdk.examples.examplebenchmark.system.SystemAdapter;
 import org.hobbit.sdk.utils.CommandQueueListener;
 import org.hobbit.sdk.utils.ComponentsExecutor;
+import org.hobbit.sdk.utils.MultiThreadedImageBuilder;
+import org.hobbit.sdk.utils.QueueClient;
 import org.hobbit.sdk.utils.commandreactions.CommandReactionsBuilder;
 import org.junit.Assert;
 import org.junit.Ignore;
@@ -19,10 +21,9 @@ import org.junit.Test;
 
 import java.util.Date;
 
-import static org.hobbit.core.Constants.BENCHMARK_PARAMETERS_MODEL_KEY;
-import static org.hobbit.core.Constants.HOBBIT_EXPERIMENT_URI_KEY;
-import static org.hobbit.core.Constants.SYSTEM_PARAMETERS_MODEL_KEY;
-import static org.hobbit.sdk.CommonConstants.*;
+import static org.hobbit.core.Constants.*;
+import static org.hobbit.sdk.Constants.BENCHMARK_URI;
+import static org.hobbit.sdk.Constants.SYSTEM_URI;
 import static org.hobbit.sdk.examples.examplebenchmark.Constants.*;
 
 /**
@@ -54,6 +55,8 @@ public class BenchmarkTest extends EnvironmentVariablesWrapper {
 
         systemAdapterBuilder = new SystemAdapterDockerBuilder(new ExampleDockersBuilder(SystemAdapter.class, SYSTEM_IMAGE_NAME).useCachedImage(useCachedImage));
         evalModuleBuilder = new EvalModuleDockerBuilder(new ExampleDockersBuilder(EvalModule.class, EVALMODULE_IMAGE_NAME).useCachedImage(useCachedImage));
+
+
     }
 
 
@@ -61,7 +64,6 @@ public class BenchmarkTest extends EnvironmentVariablesWrapper {
     public void buildImages() throws Exception {
 
         init(false);
-        //benchmarkBuilder.build().prepareImage();
 
         MultiThreadedImageBuilder builder = new MultiThreadedImageBuilder(8);
         builder.addTask(benchmarkBuilder);
@@ -130,9 +132,8 @@ public class BenchmarkTest extends EnvironmentVariablesWrapper {
                 ;
 
         commandQueueListener.setCommandReactions(
-                commandReactionsBuilder.buildStartCommandsReaction(), //comment this if you want to run containers on a platform instance (if the platform is running)
-                commandReactionsBuilder.buildTerminateCommandsReaction(),
-                commandReactionsBuilder.buildPlatformCommandsReaction()
+                commandReactionsBuilder.containerCommandsReaction(), //comment this if you want to run containers on a platform instance (if the platform is running)
+                commandReactionsBuilder.benchmarkSignalsReaction()
         );
 
         componentsExecutor.submit(commandQueueListener);
@@ -140,13 +141,14 @@ public class BenchmarkTest extends EnvironmentVariablesWrapper {
 
         // Start components without sending command to queue. Components will be executed by SDK, not the running platform (if it is running)
         String benchmarkContainerId = "benchmark";
-        componentsExecutor.submit(benchmarkController, benchmarkContainerId, new String[]{ HOBBIT_EXPERIMENT_URI_KEY+"="+EXPERIMENT_URI,  BENCHMARK_PARAMETERS_MODEL_KEY+"="+ createBenchmarkParameters() });
         String systemContainerId = "system";
-        componentsExecutor.submit(systemAdapter, systemContainerId, new String[]{ SYSTEM_PARAMETERS_MODEL_KEY+"="+ createSystemParameters() });
+
+//        componentsExecutor.submit(benchmarkController, benchmarkContainerId, new String[]{ HOBBIT_EXPERIMENT_URI_KEY+"="+EXPERIMENT_URI,  BENCHMARK_PARAMETERS_MODEL_KEY+"="+ createBenchmarkParameters() });
+//        componentsExecutor.submit(systemAdapter, systemContainerId, new String[]{ SYSTEM_PARAMETERS_MODEL_KEY+"="+ createSystemParameters() });
 
         //Alternative. Start components via command queue (will be executed by the platform (if running))
-//        String benchmarkContainerId = commandQueueListener.createContainer(benchmarkBuilder.getImageName(), "benchmark", new String[]{ HOBBIT_EXPERIMENT_URI_KEY+"="+EXPERIMENT_URI,  BENCHMARK_PARAMETERS_MODEL_KEY+"="+ createBenchmarkParameters() });
-//        String systemContainerId = commandQueueListener.createContainer(systemAdapterBuilder.getImageName(), "system" ,new String[]{ SYSTEM_PARAMETERS_MODEL_KEY+"="+ createSystemParameters() });
+        benchmarkContainerId = commandQueueListener.createContainer(benchmarkBuilder.getImageName(), "benchmark", new String[]{ HOBBIT_EXPERIMENT_URI_KEY+"="+NEW_EXPERIMENT_URI,  BENCHMARK_PARAMETERS_MODEL_KEY+"="+ createBenchmarkParameters().encodeToString() });
+        systemContainerId = commandQueueListener.createContainer(systemAdapterBuilder.getImageName(), "system" ,new String[]{ SYSTEM_PARAMETERS_MODEL_KEY+"="+ createSystemParameters().encodeToString() });
 
         environmentVariables.set("BENCHMARK_CONTAINER_ID", benchmarkContainerId);
         environmentVariables.set("SYSTEM_CONTAINER_ID", systemContainerId);
@@ -159,20 +161,34 @@ public class BenchmarkTest extends EnvironmentVariablesWrapper {
     }
 
 
-    public String createBenchmarkParameters(){
-        JenaKeyValue kv = new JenaKeyValue();
+    public JenaKeyValue createBenchmarkParameters(){
+        JenaKeyValue kv = new JenaKeyValue(NEW_EXPERIMENT_URI);
         kv.setValue(BENCHMARK_URI+"benchmarkParam1", 123);
         kv.setValue(BENCHMARK_URI+"benchmarkParam2", 456);
-        return kv.encodeToString();
+        return kv;
     }
 
-    public String createSystemParameters(){
-        JenaKeyValue kv = new JenaKeyValue();
+    public JenaKeyValue createSystemParameters(){
+        JenaKeyValue kv = new JenaKeyValue(NEW_EXPERIMENT_URI);
         kv.setValue(SYSTEM_URI+"systemParam1", 123);
         //kv.setValue(SYSTEM_URI+SYSTEM_CONTAINERS_COUNT_KEY, 2);
-        return kv.encodeToString();
+        return kv;
     }
 
+    @Test
+    @Ignore
+    public void flushQueue(){
+        QueueClient queueClient = new QueueClient("smirnp");
+        queueClient.flushQueue();
+    }
+
+    @Test
+    @Ignore
+    public void submitToQueue() throws Exception {
+        QueueClient queueClient = new QueueClient("smirnp");
+        queueClient.submitToQueue(BENCHMARK_URI, SYSTEM_URI, DummyBenchmarkTestRunner.createBenchmarkParameters());
+
+    }
 
 
 }
