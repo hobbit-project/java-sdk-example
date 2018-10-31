@@ -155,7 +155,7 @@ public class BenchmarkTest extends EnvironmentVariablesWrapper {
                 ;
 
         commandQueueListener.setCommandReactions(
-                //commandReactionsBuilder.containerCommandsReaction(), //comment this if you want to run containers on a platform instance (if the platform is running)
+                commandReactionsBuilder.containerCommandsReaction(), //comment this if you want to run containers on a platform instance (if the platform is running)
                 commandReactionsBuilder.benchmarkSignalsReaction()
         );
 
