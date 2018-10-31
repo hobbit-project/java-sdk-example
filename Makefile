@@ -2,7 +2,7 @@ test-benchmark:
 	mvn -Dtest=BenchmarkTest#checkHealth test
 
 package:
-	mvn -DskipTests package
+	mvn package -DskipTests
 
 build-images:
 	make package

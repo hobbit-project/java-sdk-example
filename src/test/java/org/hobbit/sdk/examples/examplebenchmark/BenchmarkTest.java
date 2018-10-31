@@ -22,10 +22,8 @@ import org.junit.Test;
 import java.util.Date;
 
 import static org.hobbit.core.Constants.*;
-import static org.hobbit.sdk.Constants.BENCHMARK_URI;
+
 import static org.hobbit.sdk.Constants.GIT_USERNAME;
-import static org.hobbit.sdk.Constants.SYSTEM_URI;
-import static org.hobbit.sdk.examples.dummybenchmark.test.DummyBenchmarkTestRunner.createBenchmarkParameters;
 import static org.hobbit.sdk.examples.examplebenchmark.Constants.*;
 
 /**
@@ -157,7 +155,7 @@ public class BenchmarkTest extends EnvironmentVariablesWrapper {
                 ;
 
         commandQueueListener.setCommandReactions(
-                commandReactionsBuilder.containerCommandsReaction(), //comment this if you want to run containers on a platform instance (if the platform is running)
+                //commandReactionsBuilder.containerCommandsReaction(), //comment this if you want to run containers on a platform instance (if the platform is running)
                 commandReactionsBuilder.benchmarkSignalsReaction()
         );
 

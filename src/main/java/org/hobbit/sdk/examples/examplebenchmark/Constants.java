@@ -7,7 +7,7 @@ package org.hobbit.sdk.examples.examplebenchmark;
 
 public class Constants {
 
-    public static String GIT_USERNAME = "smirnp";
+    public static String GIT_USERNAME = "sdk-examples";
     public static String GIT_REPO_PATH = "git.project-hobbit.eu:4567/"+GIT_USERNAME+"/";
     //public static String GIT_REPO_PATH = "";
 
