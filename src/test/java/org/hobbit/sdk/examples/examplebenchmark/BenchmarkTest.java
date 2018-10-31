@@ -1,6 +1,7 @@
 package org.hobbit.sdk.examples.examplebenchmark;
 
 import org.hobbit.core.components.Component;
+import org.hobbit.core.rabbit.RabbitMQUtils;
 import org.hobbit.sdk.EnvironmentVariablesWrapper;
 import org.hobbit.sdk.JenaKeyValue;
 import org.hobbit.sdk.docker.AbstractDockerizer;
@@ -13,7 +14,6 @@ import org.hobbit.sdk.examples.examplebenchmark.system.SystemAdapter;
 import org.hobbit.sdk.utils.CommandQueueListener;
 import org.hobbit.sdk.utils.ComponentsExecutor;
 import org.hobbit.sdk.utils.MultiThreadedImageBuilder;
-import org.hobbit.sdk.utils.QueueClient;
 import org.hobbit.sdk.utils.commandreactions.CommandReactionsBuilder;
 import org.junit.Assert;
 import org.junit.Ignore;
@@ -23,7 +23,9 @@ import java.util.Date;
 
 import static org.hobbit.core.Constants.*;
 import static org.hobbit.sdk.Constants.BENCHMARK_URI;
+import static org.hobbit.sdk.Constants.GIT_USERNAME;
 import static org.hobbit.sdk.Constants.SYSTEM_URI;
+import static org.hobbit.sdk.examples.dummybenchmark.test.DummyBenchmarkTestRunner.createBenchmarkParameters;
 import static org.hobbit.sdk.examples.examplebenchmark.Constants.*;
 
 /**
@@ -56,6 +58,11 @@ public class BenchmarkTest extends EnvironmentVariablesWrapper {
         systemAdapterBuilder = new SystemAdapterDockerBuilder(new ExampleDockersBuilder(SystemAdapter.class, SYSTEM_IMAGE_NAME).useCachedImage(useCachedImage));
         evalModuleBuilder = new EvalModuleDockerBuilder(new ExampleDockersBuilder(EvalModule.class, EVALMODULE_IMAGE_NAME).useCachedImage(useCachedImage));
 
+//        benchmarkBuilder = new BenchmarkDockerBuilder(new PullBasedDockersBuilder(BENCHMARK_IMAGE_NAME));
+//        dataGeneratorBuilder = new DataGenDockerBuilder(new PullBasedDockersBuilder(DATAGEN_IMAGE_NAME));
+//        taskGeneratorBuilder = new TaskGenDockerBuilder(new PullBasedDockersBuilder(TASKGEN_IMAGE_NAME));
+//        evalStorageBuilder = new EvalStorageDockerBuilder(new PullBasedDockersBuilder(EVAL_STORAGE_IMAGE_NAME));
+//        evalModuleBuilder = new EvalModuleDockerBuilder(new PullBasedDockersBuilder(EVALMODULE_IMAGE_NAME));
 
     }
 
@@ -86,6 +93,24 @@ public class BenchmarkTest extends EnvironmentVariablesWrapper {
         checkHealth(true);
     }
 
+    //Flush a queue of a locally running platform
+    @Test
+    @Ignore
+    public void flushQueue(){
+        QueueClient queueClient = new QueueClient(GIT_USERNAME);
+        queueClient.flushQueue();
+    }
+
+    //Submit benchmark to a queue of a locally running platform
+    @Test
+    @Ignore
+    public void submitToQueue() throws Exception {
+        QueueClient queueClient = new QueueClient(GIT_USERNAME);
+        queueClient.submitToQueue(BENCHMARK_URI, SYSTEM_URI, createBenchmarkParameters());
+
+    }
+
+
     private void checkHealth(Boolean dockerized) throws Exception {
 
         Boolean useCachedImages = true;
@@ -93,8 +118,8 @@ public class BenchmarkTest extends EnvironmentVariablesWrapper {
 
         rabbitMqDockerizer = RabbitMqDockerizer.builder().build();
 
-        environmentVariables.set(org.hobbit.core.Constants.RABBIT_MQ_HOST_NAME_KEY, rabbitMqDockerizer.getHostName());
-        environmentVariables.set(org.hobbit.core.Constants.HOBBIT_SESSION_ID_KEY, "session_"+String.valueOf(new Date().getTime()));
+        environmentVariables.set(RABBIT_MQ_HOST_NAME_KEY, "rabbit");
+        environmentVariables.set(HOBBIT_SESSION_ID_KEY, "session_"+String.valueOf(new Date().getTime()));
 
 
         Component benchmarkController = new BenchmarkController();
@@ -117,7 +142,7 @@ public class BenchmarkTest extends EnvironmentVariablesWrapper {
         commandQueueListener = new CommandQueueListener();
         componentsExecutor = new ComponentsExecutor();
 
-        rabbitMqDockerizer.run();
+        //rabbitMqDockerizer.run();
 
 
         //comment the .systemAdapter(systemAdapter) line below to use the code for running from python
@@ -161,34 +186,20 @@ public class BenchmarkTest extends EnvironmentVariablesWrapper {
     }
 
 
-    public JenaKeyValue createBenchmarkParameters(){
+    public static JenaKeyValue createBenchmarkParameters(){
         JenaKeyValue kv = new JenaKeyValue(NEW_EXPERIMENT_URI);
-        kv.setValue(BENCHMARK_URI+"benchmarkParam1", 123);
-        kv.setValue(BENCHMARK_URI+"benchmarkParam2", 456);
+        kv.setValue(BENCHMARK_URI+"#messages", 1000);
+        kv.setValue(BENCHMARK_URI+"#benchmarkParam2", 456);
         return kv;
     }
 
-    public JenaKeyValue createSystemParameters(){
+    public static JenaKeyValue createSystemParameters(){
         JenaKeyValue kv = new JenaKeyValue(NEW_EXPERIMENT_URI);
         kv.setValue(SYSTEM_URI+"systemParam1", 123);
         //kv.setValue(SYSTEM_URI+SYSTEM_CONTAINERS_COUNT_KEY, 2);
         return kv;
     }
 
-    @Test
-    @Ignore
-    public void flushQueue(){
-        QueueClient queueClient = new QueueClient("smirnp");
-        queueClient.flushQueue();
-    }
-
-    @Test
-    @Ignore
-    public void submitToQueue() throws Exception {
-        QueueClient queueClient = new QueueClient("smirnp");
-        queueClient.submitToQueue(BENCHMARK_URI, SYSTEM_URI, DummyBenchmarkTestRunner.createBenchmarkParameters());
-
-    }
 
 
 }

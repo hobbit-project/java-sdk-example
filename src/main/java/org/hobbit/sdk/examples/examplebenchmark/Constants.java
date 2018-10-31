@@ -7,8 +7,10 @@ package org.hobbit.sdk.examples.examplebenchmark;
 
 public class Constants {
 
-    public static String GIT_REPO_PATH = "git.project-hobbit.eu:4567/sdk-examples/";
+    public static String GIT_USERNAME = "smirnp";
+    public static String GIT_REPO_PATH = "git.project-hobbit.eu:4567/"+GIT_USERNAME+"/";
     //public static String GIT_REPO_PATH = "";
+
     public static String PROJECT_NAME = "sdk-example-benchmark";
 
     //use these constants within BenchmarkController
@@ -20,7 +22,7 @@ public class Constants {
     public static final String SYSTEM_IMAGE_NAME = GIT_REPO_PATH+PROJECT_NAME +"/system-adapter";
 
     public static final String BENCHMARK_URI = "http://project-hobbit.eu/"+PROJECT_NAME;
-    public static final String SYSTEM_URI = "http://project-hobbit.eu/"+PROJECT_NAME+"system";
+    public static final String SYSTEM_URI = "http://project-hobbit.eu/"+PROJECT_NAME+"/system";
 
     public static final String SDK_BUILD_DIR_PATH = ".";  //build directory, temp docker file will be created there
     public static final String SDK_JAR_FILE_PATH = System.getProperty("sdkJarFilePath"); //should be packaged will all dependencies (via 'mvn package -DskipTests=true' command)

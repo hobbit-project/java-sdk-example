@@ -6,8 +6,12 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
+import static org.hobbit.sdk.examples.examplebenchmark.Constants.BENCHMARK_URI;
+
 public class DataGenerator extends AbstractDataGenerator {
     private static final Logger logger = LoggerFactory.getLogger(DataGenerator.class);
+
+    int messages = 1000;
 
     @Override
     public void init() throws Exception {
@@ -15,6 +19,10 @@ public class DataGenerator extends AbstractDataGenerator {
         super.init();
         logger.debug("Init()");
         // Your initialization code comes here...
+
+        if(System.getenv().containsKey(BENCHMARK_URI+"#messages")){
+            messages = Integer.parseInt(System.getenv().get(BENCHMARK_URI+"#messages"));
+        }
     }
 
     @Override
@@ -28,7 +36,7 @@ public class DataGenerator extends AbstractDataGenerator {
         logger.debug("generateData()");
         String data;
         int i=0;
-        while(i<1) {
+        while(i<messages) {
             i++;
             // Create your data here
             data = new String("data_"+String.valueOf(i));

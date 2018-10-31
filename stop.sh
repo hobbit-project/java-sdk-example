@@ -1,2 +1,2 @@
-IDS=$(sudo docker ps -a | grep $1 | awk '{print $1}')
+IDS=$(sudo docker ps -a | grep sdk-example-benchmark | awk '{print $1}')
 sudo docker stop $IDS
