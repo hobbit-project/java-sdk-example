@@ -4,6 +4,7 @@ import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.vocabulary.RDF;
 import org.hobbit.core.components.AbstractEvaluationModule;
+import org.hobbit.core.rabbit.RabbitMQUtils;
 import org.hobbit.vocab.HOBBIT;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,6 +37,8 @@ public class EvalModule extends AbstractEvaluationModule {
         Model model = createDefaultModel();
         Resource experimentResource = model.getResource(experimentUri);
         model.add(experimentResource , RDF.type, HOBBIT.Experiment);
+
+        logger.debug("Sending result model: {}", RabbitMQUtils.writeModel2String(model));
 
         return model;
     }

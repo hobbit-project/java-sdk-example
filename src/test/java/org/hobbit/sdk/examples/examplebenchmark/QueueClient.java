@@ -52,7 +52,7 @@ public class QueueClient extends EnvironmentVariablesWrapper {
     }
 
 
-    public void submitToQueue(String benchmarkUri, String systemUri, JenaKeyValue parameters) throws Exception {
+    public void submitToQueue(String benchmarkUri, String systemUri, Model model) throws Exception {
 
         ExperimentConfiguration cfg = new ExperimentConfiguration();
         String id = String.valueOf(String.valueOf(new Date().getTime()));
@@ -66,18 +66,13 @@ public class QueueClient extends EnvironmentVariablesWrapper {
         cfg.systemUri = systemUri;
         cfg.userName = username;
 
-        Model model = ModelFactory.createDefaultModel();
-
         String benchmarkInstanceId = Constants.NEW_EXPERIMENT_URI;
         Resource benchmarkInstanceResource = model.createResource(benchmarkInstanceId);
         model.add(benchmarkInstanceResource, RDF.type, HOBBIT.Experiment);
         model.add(benchmarkInstanceResource, HOBBIT.involvesBenchmark, model.createResource(benchmarkUri));
         model.add(benchmarkInstanceResource, HOBBIT.involvesSystemInstance, model.createResource(systemUri));
 
-        ModelsHandler.addParameters(model, benchmarkInstanceResource, parameters);
-
-        String modelStr = RabbitMQUtils.writeModel2String(model);
-        cfg.serializedBenchParams = modelStr;
+        cfg.serializedBenchParams = RabbitMQUtils.writeModel2String(model);
 
         queue.add(cfg);
 

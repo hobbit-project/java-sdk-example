@@ -11,7 +11,7 @@ import static org.hobbit.sdk.examples.examplebenchmark.Constants.BENCHMARK_URI;
 public class DataGenerator extends AbstractDataGenerator {
     private static final Logger logger = LoggerFactory.getLogger(DataGenerator.class);
 
-    int messages = 1000;
+    int messages = 10;
 
     @Override
     public void init() throws Exception {

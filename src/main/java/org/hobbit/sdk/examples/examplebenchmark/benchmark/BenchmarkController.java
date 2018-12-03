@@ -4,6 +4,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.jena.rdf.model.NodeIterator;
 import org.hobbit.core.Commands;
 import org.hobbit.core.components.AbstractBenchmarkController;
+import org.hobbit.core.rabbit.RabbitMQUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -92,7 +93,6 @@ public class BenchmarkController extends AbstractBenchmarkController {
         String[] envVariables = new String[]{"key1=value1" };
         createEvaluationModule(EVALMODULE_IMAGE_NAME, envVariables);
 
-
         // wait for the evaluation to finish
         waitForEvalComponentsToFinish();
 
@@ -102,6 +102,7 @@ public class BenchmarkController extends AbstractBenchmarkController {
         // this.resultModel.add(...);
 
         // Send the resultModul to the platform controller and terminate
+        logger.debug("Sending result model: {}", RabbitMQUtils.writeModel2String(resultModel));
         sendResultModel(resultModel);
     }
 

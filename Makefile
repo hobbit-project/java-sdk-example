@@ -6,6 +6,7 @@ package:
 
 build-images:
 	make package
+	sleep 2
 	mvn -Dtest=BenchmarkTest#buildImages test
 
 test-dockerized:

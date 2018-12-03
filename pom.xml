@@ -47,7 +47,6 @@
         </dependency>
 
 
-
         <dependency>
             <groupId>org.hobbit</groupId>
             <artifactId>hobbit-java-sdk</artifactId>

@@ -1,5 +1,8 @@
 package org.hobbit.sdk.examples.examplebenchmark;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.Resource;
 import org.hobbit.core.components.Component;
 import org.hobbit.core.rabbit.RabbitMQUtils;
 import org.hobbit.sdk.EnvironmentVariablesWrapper;
@@ -13,12 +16,15 @@ import org.hobbit.sdk.examples.examplebenchmark.benchmark.*;
 import org.hobbit.sdk.examples.examplebenchmark.system.SystemAdapter;
 import org.hobbit.sdk.utils.CommandQueueListener;
 import org.hobbit.sdk.utils.ComponentsExecutor;
+import org.hobbit.sdk.utils.ModelsHandler;
 import org.hobbit.sdk.utils.MultiThreadedImageBuilder;
 import org.hobbit.sdk.utils.commandreactions.CommandReactionsBuilder;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Date;
 
 import static org.hobbit.core.Constants.*;
@@ -170,8 +176,8 @@ public class BenchmarkTest extends EnvironmentVariablesWrapper {
 //        componentsExecutor.submit(systemAdapter, systemContainerId, new String[]{ SYSTEM_PARAMETERS_MODEL_KEY+"="+ createSystemParameters() });
 
         //Alternative. Start components via command queue (will be executed by the platform (if running))
-        benchmarkContainerId = commandQueueListener.createContainer(benchmarkBuilder.getImageName(), "benchmark", new String[]{ HOBBIT_EXPERIMENT_URI_KEY+"="+NEW_EXPERIMENT_URI,  BENCHMARK_PARAMETERS_MODEL_KEY+"="+ createBenchmarkParameters().encodeToString() });
-        systemContainerId = commandQueueListener.createContainer(systemAdapterBuilder.getImageName(), "system" ,new String[]{ SYSTEM_PARAMETERS_MODEL_KEY+"="+ createSystemParameters().encodeToString() });
+        benchmarkContainerId = commandQueueListener.createContainer(benchmarkBuilder.getImageName(), "benchmark", new String[]{ HOBBIT_EXPERIMENT_URI_KEY+"="+NEW_EXPERIMENT_URI,  BENCHMARK_PARAMETERS_MODEL_KEY+"="+ RabbitMQUtils.writeModel2String(createBenchmarkParameters()) });
+        systemContainerId = commandQueueListener.createContainer(systemAdapterBuilder.getImageName(), "system" ,new String[]{ SYSTEM_PARAMETERS_MODEL_KEY+"="+ RabbitMQUtils.writeModel2String(createSystemParameters()) });
 
         environmentVariables.set("BENCHMARK_CONTAINER_ID", benchmarkContainerId);
         environmentVariables.set("SYSTEM_CONTAINER_ID", systemContainerId);
@@ -184,18 +190,26 @@ public class BenchmarkTest extends EnvironmentVariablesWrapper {
     }
 
 
-    public static JenaKeyValue createBenchmarkParameters(){
-        JenaKeyValue kv = new JenaKeyValue(NEW_EXPERIMENT_URI);
-        kv.setValue(BENCHMARK_URI+"#messages", 1000);
-        kv.setValue(BENCHMARK_URI+"#benchmarkParam2", 456);
-        return kv;
+
+    public static Model createBenchmarkParameters() throws IOException {
+        byte[] bytes = FileUtils.readFileToByteArray(new File("benchmark.ttl"));
+        Model model =  ModelsHandler.byteArrayToModel(bytes, "TTL");
+
+        Resource experimentResource = model.createResource(org.hobbit.core.Constants.NEW_EXPERIMENT_URI);
+        model.add(experimentResource, model.createProperty(BENCHMARK_URI+"#messages"),"100");
+        ModelsHandler.fillTheInstanceWithDefaultModelValues(model, experimentResource, BENCHMARK_URI);
+
+        return model;
+
     }
 
-    public static JenaKeyValue createSystemParameters(){
-        JenaKeyValue kv = new JenaKeyValue(NEW_EXPERIMENT_URI);
-        kv.setValue(SYSTEM_URI+"systemParam1", 123);
-        //kv.setValue(SYSTEM_URI+SYSTEM_CONTAINERS_COUNT_KEY, 2);
-        return kv;
+    public static Model createSystemParameters() throws IOException {
+        byte[] bytes = FileUtils.readFileToByteArray(new File("system.ttl"));
+        Model model =  ModelsHandler.byteArrayToModel(bytes, "TTL");
+
+        Resource experimentResource = model.createResource(org.hobbit.core.Constants.NEW_EXPERIMENT_URI);
+        model.add(experimentResource, model.createProperty(BENCHMARK_URI+"#systemParam123"),"100");
+        return model;
     }
 
 
