@@ -2,17 +2,14 @@ test-benchmark:
 	mvn -Dtest=BenchmarkTest#checkHealth test
 
 package:
-	mvn package -DskipTests
+	mvn -DskipTests -DincludeDeps=true package
 
 build-images:
-	make package
-	sleep 2
 	mvn -Dtest=BenchmarkTest#buildImages test
 
-test-dockerized:
-	make package
-	make build-images
+test-dockerized-benchmark:
 	mvn -Dtest=BenchmarkTest#checkHealthDockerized test
+
 
 push-images:
 	sudo docker push git.project-hobbit.eu:4567/sdk-examples/sdk-example-benchmark/benchmark-controller
