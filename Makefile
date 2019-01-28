@@ -1,3 +1,6 @@
+install-deps:
+	mvn validate
+
 test-benchmark:
 	mvn -Dtest=BenchmarkTest#checkHealth test
 
@@ -5,7 +8,7 @@ package:
 	mvn -DskipTests -DincludeDeps=true package
 
 build-images:
-	mvn -Dtest=BenchmarkTest#buildImages test
+	mvn -Dtest=BenchmarkTest#buildImages surefire:test
 
 test-dockerized-benchmark:
 	mvn -Dtest=BenchmarkTest#checkHealthDockerized test

@@ -1,17 +1,16 @@
 package org.hobbit.sdk.examples.examplebenchmark;
 
-import org.apache.commons.io.FileUtils;
+
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.vocabulary.RDF;
 import org.hobbit.core.components.Component;
 import org.hobbit.core.rabbit.RabbitMQUtils;
-import org.hobbit.sdk.EnvironmentVariablesWrapper;
 import org.hobbit.sdk.docker.AbstractDockerizer;
 import org.hobbit.sdk.docker.RabbitMqDockerizer;
 import org.hobbit.sdk.docker.builders.*;
 import org.hobbit.sdk.docker.builders.hobbit.*;
-import org.hobbit.sdk.examples.dummybenchmark.test.DummyBenchmarkTestRunner;
+
 import org.hobbit.sdk.examples.examplebenchmark.benchmark.*;
 import org.hobbit.sdk.examples.examplebenchmark.system.SystemAdapter;
 import org.hobbit.sdk.utils.CommandQueueListener;
@@ -23,6 +22,7 @@ import org.hobbit.vocab.HOBBIT;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.contrib.java.lang.system.EnvironmentVariables;
 
 import java.io.File;
 import java.io.IOException;
@@ -39,8 +39,9 @@ import static org.hobbit.sdk.examples.examplebenchmark.Constants.*;
  * @author Pavel Smirnov
  */
 
-public class BenchmarkTest extends EnvironmentVariablesWrapper {
+public class BenchmarkTest {
 
+    public final EnvironmentVariables environmentVariables = new EnvironmentVariables();
     private AbstractDockerizer rabbitMqDockerizer;
     private ComponentsExecutor componentsExecutor;
     private CommandQueueListener commandQueueListener;

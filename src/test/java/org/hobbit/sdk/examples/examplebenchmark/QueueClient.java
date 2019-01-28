@@ -9,10 +9,11 @@ import org.hobbit.controller.data.ExperimentConfiguration;
 import org.hobbit.controller.queue.ExperimentQueueImpl;
 import org.hobbit.core.Constants;
 import org.hobbit.core.rabbit.RabbitMQUtils;
-import org.hobbit.sdk.EnvironmentVariablesWrapper;
 import org.hobbit.sdk.examples.dummybenchmark.DummyBenchmarkController;
 import org.hobbit.sdk.utils.ModelsHandler;
 import org.hobbit.vocab.HOBBIT;
+
+import org.junit.contrib.java.lang.system.EnvironmentVariables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,7 +25,8 @@ import java.util.Map;
 /**
  * @author Pavel Smirnov. (psmirnov@agtinternational.com / smirnp@gmail.com)
  */
-public class QueueClient extends EnvironmentVariablesWrapper {
+public class QueueClient {
+    public final EnvironmentVariables environmentVariables = new EnvironmentVariables();
     private static final Logger logger = LoggerFactory.getLogger(QueueClient.class);
     ExperimentQueueImpl queue;
     String username;

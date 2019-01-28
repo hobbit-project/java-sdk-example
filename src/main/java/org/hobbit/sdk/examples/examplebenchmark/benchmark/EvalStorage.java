@@ -71,7 +71,7 @@ public class EvalStorage extends AbstractEvaluationStorage {
 
     @Override
     protected Iterator<ResultPair> createIterator() {
-        logger.trace("createIterator()->{} items",results.size());
+        logger.debug("createIterator()->{} items",results.size());
         return results.values().iterator();
     }
 

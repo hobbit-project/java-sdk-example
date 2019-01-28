@@ -1,5 +1,6 @@
 language: java
 script:
+  - make install-deps
   - make test-benchmark
   - make package
   - make build-images
