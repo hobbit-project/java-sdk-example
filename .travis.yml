@@ -1,6 +1,7 @@
 language: java
-script:
+before_install:
   - make install-deps
+script:
   - make test-benchmark
   - make package
   - make build-images
