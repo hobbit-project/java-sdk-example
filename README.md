@@ -1,4 +1,4 @@
-# HOBBIT Java SDK Example kit
+# HOBBIT Java SDK Example [![Build Status](https://travis-ci.org/hobbit-project/java-sdk-example.svg?branch=master)](https://travis-ci.org/hobbit-project/java-sdk-example)
 
 This repository contains all types of [HOBBIT-compatible components](https://github.com/hobbit-project/platform/wiki/Develop-a-benchmark-component-in-Java) and number of tests, requred to debug components locally without having a running instance of the platform.  
 
