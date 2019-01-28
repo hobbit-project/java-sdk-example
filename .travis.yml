@@ -1,0 +1,13 @@
+language: java
+script:
+  - make install-deps
+  - make test-benchmark
+  - make package
+  - make build-images
+  - make test-dockerized-benchmark
+addons:
+  hosts:
+    - rabbit
+services:
+  - docker
+sudo: required
