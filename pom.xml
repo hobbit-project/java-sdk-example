@@ -61,34 +61,6 @@
             </exclusions>
         </dependency>
 
-        <dependency>
-            <groupId>com.github.stefanbirkner</groupId>
-            <artifactId>system-rules</artifactId>
-            <version>1.16.0</version>
-        </dependency>
-
-        <!--Docker clinet requires apache httpclient, commons-compress-->
-        <dependency>
-            <groupId>com.spotify</groupId>
-            <artifactId>docker-client</artifactId>
-            <version>8.11.7</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpclient</artifactId>
-            <version>4.5</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-compress</artifactId>
-            <version>1.9</version>
-        </dependency>
-        <!--/Docker clinet requires apache httpclient, commons-compress-->
-
 
         <dependency>
             <groupId>org.slf4j</groupId>
