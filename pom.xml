@@ -67,7 +67,7 @@
             <version>1.16.0</version>
         </dependency>
 
-        <!--Docker clinet requires apache httpclient-->
+        <!--Docker clinet requires apache httpclient, commons-compress-->
         <dependency>
             <groupId>com.spotify</groupId>
             <artifactId>docker-client</artifactId>
@@ -75,14 +75,19 @@
             <scope>test</scope>
         </dependency>
 
-
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
             <version>4.5</version>
             <scope>test</scope>
         </dependency>
-        <!--/Docker clinet requires apache httpclient-->
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-compress</artifactId>
+            <version>1.9</version>
+        </dependency>
+        <!--/Docker clinet requires apache httpclient, commons-compress-->
 
 
         <dependency>
@@ -103,15 +108,14 @@
             <artifactId>platform-controller</artifactId>
             <version>2.0.5</version>
             <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.spotify</groupId>
+                    <artifactId>docker-client</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
-
-        <!--<dependency>-->
-            <!--<groupId>junit</groupId>-->
-            <!--<artifactId>junit</artifactId>-->
-            <!--<version>${junit.version}</version>-->
-            <!--<scope>test</scope>-->
-        <!--</dependency>-->
 
     </dependencies>
 
@@ -255,6 +259,7 @@
                         <phase>validate</phase>
                         <configuration>
                             <file>${basedir}/libs/hobbit-java-sdk-${hobbit.sdk.version}.jar</file>
+                            <pomFile>${basedir}/libs/hobbit-java-sdk-${hobbit.sdk.version}.pom</pomFile>
                             <repositoryLayout>default</repositoryLayout>
                             <groupId>org.hobbit</groupId>
                             <artifactId>hobbit-java-sdk</artifactId>

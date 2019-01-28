@@ -21,7 +21,7 @@ public class TaskGenerator extends AbstractTaskGenerator {
     @Override
     protected void generateTask(byte[] data) throws Exception {
         String dataString = new String(data);
-        logger.trace("generateTask()->{}",dataString);
+        logger.debug("generateTask()->{}",dataString);
         // Create tasks based on the incoming data inside this method.
         // You might want to use the id of this task generator and the
         // number of all task generators running in parallel.
@@ -39,11 +39,11 @@ public class TaskGenerator extends AbstractTaskGenerator {
         // Send the task to the system (and store the timestamp)
         long timestamp = System.currentTimeMillis();
 
-        logger.trace("sendTaskToSystemAdapter({})->{}",taskId, taskDataStr);
+        logger.debug("sendTaskToSystemAdapter({})->{}",taskId, taskDataStr);
         sendTaskToSystemAdapter(taskId, taskDataStr.getBytes());
 
         // Send the expected answer to the evaluation store
-        logger.trace("sendTaskToEvalStorage({})->{}", taskId, expectedAnswerDataStr);
+        logger.debug("sendTaskToEvalStorage({})->{}", taskId, expectedAnswerDataStr);
         sendTaskToEvalStorage(taskId, timestamp, expectedAnswerDataStr.getBytes());
     }
 
